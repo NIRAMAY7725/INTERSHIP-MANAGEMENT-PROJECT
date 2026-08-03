@@ -1,0 +1,99 @@
+A backend is simply **the brain of your website**. The frontend shows things to users, while the backend handles the work behind the scenes.
+
+## A simple backend structure
+
+```text
+my-project/
+│
+├── server.js          // Main server
+├── package.json
+├── .env               // Secret keys
+│
+├── routes/            // API routes
+│   ├── userRoutes.js
+│   └── authRoutes.js
+│
+├── controllers/       // Logic
+│   ├── userController.js
+│   └── authController.js
+│
+├── models/            // Database models
+│   └── User.js
+│
+├── middleware/        // Authentication, errors
+│   └── auth.js
+│
+├── config/            // Database connection
+│   └── db.js
+│
+└── uploads/           // Images/files
+```
+
+## Backend flow
+
+```text
+User
+   ↓
+Frontend (HTML/CSS/JS/React)
+   ↓
+API Request
+   ↓
+Route
+   ↓
+Controller
+   ↓
+Database
+   ↓
+Response
+   ↓
+Frontend
+```
+
+## Tech stack (beginner-friendly)
+
+* **Runtime:** Node.js
+* **Framework:** Express.js
+* **Database:** MongoDB
+* **Authentication:** JWT
+* **Password Hashing:** bcrypt
+* **Environment Variables:** dotenv
+
+## Example
+
+User clicks **Login**.
+
+```text
+Frontend
+      ↓
+POST /login
+      ↓
+Route
+      ↓
+Controller checks email & password
+      ↓
+MongoDB
+      ↓
+JWT Token generated
+      ↓
+Frontend receives success
+```
+
+## Build order
+
+1. Create Express server.
+2. Connect MongoDB.
+3. Create Routes.
+4. Create Controllers.
+5. Create Models.
+6. Add Authentication (JWT).
+7. Validate input.
+8. Handle errors.
+9. Test APIs with Postman.
+10. Deploy.
+
+🎯 Since you're aiming for a developer job, master this order:
+
+**HTML → CSS → JavaScript → Node.js → Express.js → MongoDB → REST APIs → Authentication
+ → Git/GitHub → Deployment**
+
+

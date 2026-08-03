@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background orbs */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            z-index: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        body::before {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #6c5ce7, transparent);
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #00cec9, transparent);
+            bottom: -80px;
+            left: -80px;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 999px;
+            background: rgba(108, 92, 231, 0.15);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            color: #a29bfe;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #a29bfe 50%, #00cec9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #6b6b80;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(108, 92, 231, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: #6b6b80;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Add user form */
+        .form-card {
+            padding: 28px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            margin-bottom: 32px;
+        }
+
+        .form-card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-row input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e0e0e8;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-row input::placeholder {
+            color: #4a4a5e;
+        }
+
+        .form-row input:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(108, 92, 231, 0.35);
+        }
+
+        .btn-add:active {
+            transform: translateY(0);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: rgba(0, 206, 201, 0.15);
+            border: 1px solid rgba(0, 206, 201, 0.3);
+            color: #00cec9;
+        }
+
+        .toast.error {
+            background: rgba(255, 71, 87, 0.15);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            color: #ff4757;
+        }
+
+        /* Users table */
+        .table-card {
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+        }
+
+        .table-card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            padding: 24px 28px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            padding: 12px 28px;
+            text-align: left;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b6b80;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        tbody tr:hover {
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        tbody td {
+            padding: 16px 28px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .user-email {
+            color: #a29bfe;
+        }
+
+        .user-age {
+            color: #00cec9;
+            font-weight: 600;
+        }
+
+        .user-id {
+            color: #4a4a5e;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 28px;
+            color: #4a4a5e;
+        }
+
+        .empty-state .icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(108, 92, 231, 0.2);
+            border-top-color: #6c5ce7;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.6rem; }
+            .stats-bar { flex-direction: column; }
+            .form-row { flex-direction: column; }
+            thead th, tbody td { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="badge">🗄️ MongoDB Live View</div>
+            <h1>Database Dashboard</h1>
+            <p>Connected to your MongoDB cluster — real-time data</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="totalUsers">—</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgAge">—</div>
+                <div class="stat-label">Avg Age</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="dbStatus">⏳</div>
+                <div class="stat-label">DB Status</div>
+            </div>
+        </div>
+
+        <!-- Add User Form -->
+        <div class="form-card">
+            <h2>➕ Add New User</h2>
+            <form id="addUserForm">
+                <div class="form-row">
+                    <input type="text" id="nameInput" placeholder="Name" required />
+                    <input type="email" id="emailInput" placeholder="Email" required />
+                    <input type="number" id="ageInput" placeholder="Age" required min="1" />
+                </div>
+                <button type="submit" class="btn-add" id="submitBtn">Add User to Database</button>
+            </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-card">
+            <h2>👥 Users in Database</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Mongo _id</th>
+                    </tr>
+                </thead>
+                <tbody id="usersBody">
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <div class="icon">⏳</div>
+                            Loading...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const usersBody = document.getElementById("usersBody");
+        const totalUsersEl = document.getElementById("totalUsers");
+        const avgAgeEl = document.getElementById("avgAge");
+        const dbStatusEl = document.getElementById("dbStatus");
+        const form = document.getElementById("addUserForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const toast = document.getElementById("toast");
+
+        // Show toast notification
+        function showToast(message, type = "success") {
+            toast.textContent = message;
+            toast.className = "toast " + type + " show";
+            setTimeout(() => { toast.className = "toast"; }, 3000);
+        }
+
+        // Fetch and render users
+        async function loadUsers() {
+            try {
+                const res = await fetch("/api/users");
+                const users = await res.json();
+
+                dbStatusEl.textContent = "✅";
+                totalUsersEl.textContent = users.length;
+
+                if (users.length > 0) {
+                    const avg = (users.reduce((sum, u) => sum + u.age, 0) / users.length).toFixed(1);
+                    avgAgeEl.textContent = avg;
+                } else {
+                    avgAgeEl.textContent = "—";
+                }
+
+                if (users.length === 0) {
+                    usersBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <div class="icon">📭</div>
+                                No users yet — add one above!
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                usersBody.innerHTML = users.map((u, i) => `
+                    <tr style="animation-delay: ${i * 0.06}s">
+                        <td class="user-name">${u.name}</td>
+                        <td class="user-email">${u.email}</td>
+                        <td class="user-age">${u.age}</td>
+                        <td class="user-id">${u._id}</td>
+                    </tr>
+                `).join("");
+
+            } catch (err) {
+                dbStatusEl.textContent = "❌";
+                usersBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <div class="icon">⚠️</div>
+                            Failed to connect — ${err.message}
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        // Add user
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            submitBtn.innerHTML = '<span class="spinner"></span>Saving...';
+            submitBtn.disabled = true;
+
+            const body = {
+                name: document.getElementById("nameInput").value.trim(),
+                email: document.getElementById("emailInput").value.trim(),
+                age: parseInt(document.getElementById("ageInput").value),
+            };
+
+            try {
+                const res = await fetch("/api/users", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                });
+
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.error || "Failed to add user");
+                }
+
+                showToast("✅ User added successfully!");
+                form.reset();
+                loadUsers();
+            } catch (err) {
+                showToast("❌ " + err.message, "error");
+            } finally {
+                submitBtn.innerHTML = "Add User to Database";
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Initial load
+        loadUsers();
+    </script>
+</body>
+</html>
