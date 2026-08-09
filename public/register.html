@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — InternManage</title>
+    <meta name="description" content="Create your InternManage account — join as a student, company, or administrator." />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <div class="navbar-logo">🎓</div>
+                <div class="navbar-brand-text">
+                    <h1>Intern<span>Manage</span></h1>
+                    <p>Empowering Internships, Building Careers</p>
+                </div>
+            </a>
+            <div class="navbar-nav" id="navMenu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="navbar-actions">
+                <div class="navbar-auth">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+                <div class="navbar-user" id="navUser">
+                    <div class="navbar-user-avatar">N</div>
+                    <span class="navbar-user-name">User</span>
+                    <a href="login.html" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                </div>
+                <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ REGISTER FORM ═══ -->
+    <div class="auth-page">
+        <div class="auth-card" style="max-width: 520px;">
+            <div class="auth-header">
+                <div class="auth-logo">🎓</div>
+                <h2>Create Account</h2>
+                <p>Join InternManage and start your journey</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <!-- Role Selector -->
+                <div style="margin-bottom: 24px;">
+                    <label class="form-label">I am a...</label>
+                    <div class="role-selector">
+                        <div class="role-option selected" data-role="user">
+                            <div class="role-option-icon">👨‍🎓</div>
+                            <div class="role-option-label">Student</div>
+                        </div>
+                        <div class="role-option" data-role="company">
+                            <div class="role-option-icon">🏢</div>
+                            <div class="role-option-label">Company</div>
+                        </div>
+                        <div class="role-option" data-role="admin">
+                            <div class="role-option-icon">🛡️</div>
+                            <div class="role-option-label">Admin</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerName">Full Name</label>
+                    <div class="form-input-icon">
+                        <span class="input-icon">👤</span>
+                        <input type="text" class="form-input" id="registerName" placeholder="Enter your full name" required minlength="2" maxlength="50" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerEmail">Email Address</label>
+                    <div class="form-input-icon">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" class="form-input" id="registerEmail" placeholder="Enter your email" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerPassword">Password</label>
+                    <div class="form-input-icon">
+                        <span class="input-icon">🔒</span>
+                        <div class="password-wrapper" style="width: 100%;">
+                            <input type="password" class="form-input" id="registerPassword" placeholder="Create a password (min 6 chars)" required minlength="6" style="padding-left: 44px; padding-right: 44px;" />
+                            <button type="button" class="password-toggle">👁️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="registerConfirmPassword">Confirm Password</label>
+                    <div class="form-input-icon">
+                        <span class="input-icon">🔒</span>
+                        <div class="password-wrapper" style="width: 100%;">
+                            <input type="password" class="form-input" id="registerConfirmPassword" placeholder="Confirm your password" required minlength="6" style="padding-left: 44px; padding-right: 44px;" />
+                            <button type="button" class="password-toggle">👁️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 8px;">
+                    <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--gray-500); cursor: pointer;">
+                        <input type="checkbox" required style="accent-color: var(--primary); margin-top: 3px;" />
+                        I agree to the <a href="#" style="color: var(--primary); font-weight: 500;">Terms of Service</a>&nbsp;and&nbsp;<a href="#" style="color: var(--primary); font-weight: 500;">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Create Account →
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

@@ -97,3 +97,9 @@ Frontend receives success
  → Git/GitHub → Deployment**
 
 
+.......................................Command	What it shows
+.......................................GIT POST
+git log	All your saved commits (history)
+git show --stat	Which files are in the last commit
+git diff	What you changed since last save
+git status	Which files are modified / unsaved

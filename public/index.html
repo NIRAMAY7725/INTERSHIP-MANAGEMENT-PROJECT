@@ -3,519 +3,311 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Database Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a0f;
-            color: #e0e0e8;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animated gradient background orbs */
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.3;
-            z-index: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        body::before {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, #6c5ce7, transparent);
-            top: -100px;
-            right: -100px;
-        }
-
-        body::after {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, #00cec9, transparent);
-            bottom: -80px;
-            left: -80px;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-30px) scale(1.05); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 48px 24px;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .header .badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 999px;
-            background: rgba(108, 92, 231, 0.15);
-            border: 1px solid rgba(108, 92, 231, 0.3);
-            color: #a29bfe;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #a29bfe 50%, #00cec9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            font-size: 1rem;
-            color: #6b6b80;
-        }
-
-        /* Stats bar */
-        .stats-bar {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            flex: 1;
-            padding: 20px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            text-align: center;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .stat-card:hover {
-            border-color: rgba(108, 92, 231, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .stat-card .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-        }
-
-        .stat-card .stat-label {
-            font-size: 0.75rem;
-            color: #6b6b80;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        /* Add user form */
-        .form-card {
-            padding: 28px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            margin-bottom: 32px;
-        }
-
-        .form-card h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .form-row input {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.04);
-            color: #e0e0e8;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .form-row input::placeholder {
-            color: #4a4a5e;
-        }
-
-        .form-row input:focus {
-            border-color: #6c5ce7;
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
-        }
-
-        .btn-add {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-add:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(108, 92, 231, 0.35);
-        }
-
-        .btn-add:active {
-            transform: translateY(0);
-        }
-
-        /* Toast notification */
-        .toast {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.success {
-            background: rgba(0, 206, 201, 0.15);
-            border: 1px solid rgba(0, 206, 201, 0.3);
-            color: #00cec9;
-        }
-
-        .toast.error {
-            background: rgba(255, 71, 87, 0.15);
-            border: 1px solid rgba(255, 71, 87, 0.3);
-            color: #ff4757;
-        }
-
-        /* Users table */
-        .table-card {
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            overflow: hidden;
-        }
-
-        .table-card h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-            padding: 24px 28px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead th {
-            padding: 12px 28px;
-            text-align: left;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #6b6b80;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        tbody tr {
-            transition: background 0.2s;
-            animation: fadeIn 0.4s ease forwards;
-            opacity: 0;
-        }
-
-        tbody tr:hover {
-            background: rgba(108, 92, 231, 0.05);
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        tbody td {
-            padding: 16px 28px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .user-email {
-            color: #a29bfe;
-        }
-
-        .user-age {
-            color: #00cec9;
-            font-weight: 600;
-        }
-
-        .user-id {
-            color: #4a4a5e;
-            font-size: 0.75rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 48px 28px;
-            color: #4a4a5e;
-        }
-
-        .empty-state .icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-        }
-
-        /* Loading spinner */
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(108, 92, 231, 0.2);
-            border-top-color: #6c5ce7;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .header h1 { font-size: 1.6rem; }
-            .stats-bar { flex-direction: column; }
-            .form-row { flex-direction: column; }
-            thead th, tbody td { padding: 12px 16px; }
-        }
-    </style>
+    <title>InternManage — Online Internship Management Portal</title>
+    <meta name="description" content="A one-stop solution for students, companies, and colleges to manage internships efficiently and seamlessly." />
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="badge">🗄️ MongoDB Live View</div>
-            <h1>Database Dashboard</h1>
-            <p>Connected to your MongoDB cluster — real-time data</p>
-        </div>
 
-        <!-- Stats -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-value" id="totalUsers">—</div>
-                <div class="stat-label">Total Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgAge">—</div>
-                <div class="stat-label">Avg Age</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="dbStatus">⏳</div>
-                <div class="stat-label">DB Status</div>
-            </div>
-        </div>
-
-        <!-- Add User Form -->
-        <div class="form-card">
-            <h2>➕ Add New User</h2>
-            <form id="addUserForm">
-                <div class="form-row">
-                    <input type="text" id="nameInput" placeholder="Name" required />
-                    <input type="email" id="emailInput" placeholder="Email" required />
-                    <input type="number" id="ageInput" placeholder="Age" required min="1" />
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <div class="navbar-logo">🎓</div>
+                <div class="navbar-brand-text">
+                    <h1>Intern<span>Manage</span></h1>
+                    <p>Empowering Internships, Building Careers</p>
                 </div>
-                <button type="submit" class="btn-add" id="submitBtn">Add User to Database</button>
-            </form>
+            </a>
+
+            <div class="navbar-nav" id="navMenu">
+                <a href="index.html" class="active">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div class="navbar-actions">
+                <div class="navbar-auth">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+                <div class="navbar-user" id="navUser">
+                    <div class="navbar-user-avatar">N</div>
+                    <span class="navbar-user-name">User</span>
+                    <a href="login.html" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                </div>
+                <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
+    </nav>
 
-        <!-- Users Table -->
-        <div class="table-card">
-            <h2>👥 Users in Database</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Age</th>
-                        <th>Mongo _id</th>
-                    </tr>
-                </thead>
-                <tbody id="usersBody">
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <div class="icon">⏳</div>
-                            Loading...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="section-badge">⭐ Empowering Internships, Building Careers</div>
+                <h1 class="hero-title">
+                    Online Internship<br />
+                    Management <span>Portal</span>
+                </h1>
+                <p class="hero-text">
+                    A one-stop solution for students, companies, and colleges
+                    to manage internships efficiently and seamlessly.
+                </p>
+                <div class="hero-actions">
+                    <a href="register.html" class="btn btn-primary btn-lg">Get Started →</a>
+                    <a href="how-it-works.html" class="btn btn-outline btn-lg">Learn More ⓘ</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">👨‍🎓</div>
+                        <div>
+                            <div class="hero-stat-value" data-count="500" data-suffix="+">0</div>
+                            <div class="hero-stat-label">Students</div>
+                        </div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">🏢</div>
+                        <div>
+                            <div class="hero-stat-value" data-count="100" data-suffix="+">0</div>
+                            <div class="hero-stat-label">Companies</div>
+                        </div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">📋</div>
+                        <div>
+                            <div class="hero-stat-value" data-count="300" data-suffix="+">0</div>
+                            <div class="hero-stat-label">Internships</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image float-animation">
+                <div style="background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); padding: 32px; width: 100%; max-width: 480px;">
+                    <!-- Dashboard Mockup -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-900);">Dashboard</h3>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="padding: 8px 16px; border-radius: var(--radius-sm); background: var(--gray-100); font-size: 0.8rem; color: var(--gray-500);">🔍 Search internships...</div>
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">👤</div>
+                        </div>
+                    </div>
+                    <!-- Sidebar + Content -->
+                    <div style="display: flex; gap: 16px;">
+                        <div style="width: 140px; display: flex; flex-direction: column; gap: 4px;">
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); background: var(--primary); color: white; font-size: 0.8rem; font-weight: 600;">📊 Dashboard</div>
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">💼 Internships</div>
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">📄 Applications</div>
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">📝 Reports</div>
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">💬 Messages</div>
+                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">👤 Profile</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <!-- Stats Row -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;">
+                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
+                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">128</div>
+                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Total Internships</div>
+                                </div>
+                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
+                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">234</div>
+                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Applications</div>
+                                </div>
+                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
+                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">56</div>
+                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Ongoing</div>
+                                </div>
+                            </div>
+                            <!-- Recent List -->
+                            <div style="font-size: 0.8rem; font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">Recent Internships</div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                                    <div>
+                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">Web Development Intern</div>
+                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Tech Solutions Pvt. Ltd.</div>
+                                    </div>
+                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: var(--primary-light); color: var(--primary); font-size: 0.65rem; font-weight: 600;">Full Stack</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                                    <div>
+                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">UI/UX Design Intern</div>
+                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Creative Minds Agency</div>
+                                    </div>
+                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: #FEF3C7; color: #92400E; font-size: 0.65rem; font-weight: 600;">Design</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                                    <div>
+                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">Data Science Intern</div>
+                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Data Insights</div>
+                                    </div>
+                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: #D1FAE5; color: #065F46; font-size: 0.65rem; font-weight: 600;">Data Science</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section class="section" id="howItWorks">
+        <div class="container text-center">
+            <h2 class="section-title animate-on-scroll">How It Works</h2>
+            <div class="section-divider" style="margin: 16px auto 8px;"></div>
+        </div>
+        <div class="container">
+            <div class="steps animate-on-scroll stagger-children">
+                <div class="step">
+                    <div class="step-icon">👤</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 1</div>
+                    <div class="step-title">Register</div>
+                    <p class="step-text">Create your account as student, company or admin.</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-icon">🔍</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 2</div>
+                    <div class="step-title">Browse</div>
+                    <p class="step-text">Explore internships and opportunities available.</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-icon">📝</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 3</div>
+                    <div class="step-title">Apply</div>
+                    <p class="step-text">Apply for internships that match your skills.</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-icon">📋</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 4</div>
+                    <div class="step-title">Review</div>
+                    <p class="step-text">Companies review applications and shortlist candidates.</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-icon">⚙️</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 5</div>
+                    <div class="step-title">Manage</div>
+                    <p class="step-text">Manage progress, reports and get certificates.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script>
-        const usersBody = document.getElementById("usersBody");
-        const totalUsersEl = document.getElementById("totalUsers");
-        const avgAgeEl = document.getElementById("avgAge");
-        const dbStatusEl = document.getElementById("dbStatus");
-        const form = document.getElementById("addUserForm");
-        const submitBtn = document.getElementById("submitBtn");
-        const toast = document.getElementById("toast");
+    <!-- ═══ WHO CAN USE ═══ -->
+    <section class="section section--gray">
+        <div class="container text-center">
+            <h2 class="section-title animate-on-scroll">Who Can Use This Portal?</h2>
+            <div class="section-divider" style="margin: 16px auto 40px;"></div>
+        </div>
+        <div class="container">
+            <div class="grid-3 stagger-children animate-on-scroll">
+                <div class="role-card">
+                    <div class="role-card-icon student">👨‍🎓</div>
+                    <h3 class="role-card-title">For Students</h3>
+                    <p class="role-card-text">Find and apply for internships, track applications, submit reports and get certificates.</p>
+                    <a href="register.html" class="card-link">Get Started →</a>
+                </div>
+                <div class="role-card">
+                    <div class="role-card-icon company">🏢</div>
+                    <h3 class="role-card-title">For Companies</h3>
+                    <p class="role-card-text">Post internship opportunities, review applications, manage interns and provide certificates.</p>
+                    <a href="register.html" class="card-link">Get Started →</a>
+                </div>
+                <div class="role-card">
+                    <div class="role-card-icon admin">🛡️</div>
+                    <h3 class="role-card-title">For Administrators</h3>
+                    <p class="role-card-text">Manage students, companies, internships, approvals and generate reports.</p>
+                    <a href="register.html" class="card-link">Get Started →</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Show toast notification
-        function showToast(message, type = "success") {
-            toast.textContent = message;
-            toast.className = "toast " + type + " show";
-            setTimeout(() => { toast.className = "toast"; }, 3000);
-        }
+    <!-- ═══ CTA BANNER ═══ -->
+    <section class="section">
+        <div class="container">
+            <div class="cta-banner animate-on-scroll">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="cta-banner-icon">🚀</div>
+                    <div class="cta-banner-content">
+                        <h3>Ready to get started?</h3>
+                        <p>Join thousands of students and companies using our platform.</p>
+                    </div>
+                </div>
+                <a href="register.html" class="btn btn-white">Register Now →</a>
+            </div>
+        </div>
+    </section>
 
-        // Fetch and render users
-        async function loadUsers() {
-            try {
-                const res = await fetch("/api/users");
-                const users = await res.json();
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🎓 Intern<span>Manage</span></h3>
+                    <p>Empowering internships and helping students build successful careers.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">f</a>
+                        <a href="#" aria-label="Twitter">𝕏</a>
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="/">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Students</h4>
+                    <a href="internship-listings.html">Browse Internships</a>
+                    <a href="applications.html">Track Applications</a>
+                    <a href="reports.html">Submit Reports</a>
+                    <a href="my-certificates.html">Certificates</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Companies</h4>
+                    <a href="post-internship.html">Post Internship</a>
+                    <a href="applications.html">Manage Applications</a>
+                    <a href="#">Find Talent</a>
+                    <a href="dashboard.html">Dashboard</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📍</span>
+                        <span>Sigma University, Vadodara,<br />Gujarat – 390019, India</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">✉️</span>
+                        <span>support@internmanage.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📞</span>
+                        <span>+91 98765 43210</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2024 InternManage. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-                dbStatusEl.textContent = "✅";
-                totalUsersEl.textContent = users.length;
-
-                if (users.length > 0) {
-                    const avg = (users.reduce((sum, u) => sum + u.age, 0) / users.length).toFixed(1);
-                    avgAgeEl.textContent = avg;
-                } else {
-                    avgAgeEl.textContent = "—";
-                }
-
-                if (users.length === 0) {
-                    usersBody.innerHTML = `
-                        <tr>
-                            <td colspan="4" class="empty-state">
-                                <div class="icon">📭</div>
-                                No users yet — add one above!
-                            </td>
-                        </tr>`;
-                    return;
-                }
-
-                usersBody.innerHTML = users.map((u, i) => `
-                    <tr style="animation-delay: ${i * 0.06}s">
-                        <td class="user-name">${u.name}</td>
-                        <td class="user-email">${u.email}</td>
-                        <td class="user-age">${u.age}</td>
-                        <td class="user-id">${u._id}</td>
-                    </tr>
-                `).join("");
-
-            } catch (err) {
-                dbStatusEl.textContent = "❌";
-                usersBody.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <div class="icon">⚠️</div>
-                            Failed to connect — ${err.message}
-                        </td>
-                    </tr>`;
-            }
-        }
-
-        // Add user
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            submitBtn.innerHTML = '<span class="spinner"></span>Saving...';
-            submitBtn.disabled = true;
-
-            const body = {
-                name: document.getElementById("nameInput").value.trim(),
-                email: document.getElementById("emailInput").value.trim(),
-                age: parseInt(document.getElementById("ageInput").value),
-            };
-
-            try {
-                const res = await fetch("/api/users", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body),
-                });
-
-                if (!res.ok) {
-                    const data = await res.json();
-                    throw new Error(data.error || "Failed to add user");
-                }
-
-                showToast("✅ User added successfully!");
-                form.reset();
-                loadUsers();
-            } catch (err) {
-                showToast("❌ " + err.message, "error");
-            } finally {
-                submitBtn.innerHTML = "Add User to Database";
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Initial load
-        loadUsers();
-    </script>
+    <script src="/js/app.js"></script>
 </body>
 </html>

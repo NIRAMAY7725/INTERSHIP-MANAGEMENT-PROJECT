@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us — InternManage</title>
+    <meta name="description" content="Have questions or need support? Contact the InternManage team — we're here to help!" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <div class="navbar-logo">🎓</div>
+                <div class="navbar-brand-text">
+                    <h1>Intern<span>Manage</span></h1>
+                    <p>Empowering Internships, Building Careers</p>
+                </div>
+            </a>
+            <div class="navbar-nav" id="navMenu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="contact.html" class="active">Contact</a>
+            </div>
+            <div class="navbar-actions">
+                <div class="navbar-auth">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+                <div class="navbar-user" id="navUser">
+                    <div class="navbar-user-avatar">N</div>
+                    <span class="navbar-user-name">User</span>
+                    <a href="#" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                </div>
+                <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="section-badge">📞 Contact Us</div>
+                <h1 class="hero-title">
+                    We're Here to <span>Help!</span>
+                </h1>
+                <div class="section-divider"></div>
+                <p class="hero-text">
+                    Have questions, suggestions, or need support?
+                    Feel free to reach out to us. Our team will get back to you
+                    as soon as possible.
+                </p>
+            </div>
+            <div class="hero-image float-animation">
+                <div style="background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); padding: 32px; text-align: center; max-width: 360px;">
+                    <div style="font-size: 4rem; margin-bottom: 12px;">👩‍💻</div>
+                    <div style="font-size: 1rem; font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">24/7 Support</div>
+                    <div style="font-size: 0.85rem; color: var(--gray-500);">Our team is ready to help you</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 16px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">💬</div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">✉️</div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">📞</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CONTACT SECTION ═══ -->
+    <section class="section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Send Us a Message (Form) -->
+                <div class="contact-form-card">
+                    <h3>Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="form-input-icon">
+                                    <span class="input-icon">👤</span>
+                                    <input type="text" class="form-input" id="contactName" placeholder="Your Name" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-input-icon">
+                                    <span class="input-icon">✉️</span>
+                                    <input type="email" class="form-input" id="contactEmail" placeholder="Your Email" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-input-icon">
+                                <span class="input-icon">💬</span>
+                                <input type="text" class="form-input" id="contactSubject" placeholder="Subject" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-input-icon">
+                                <span class="input-icon" style="top: 20px; transform: none;">✏️</span>
+                                <textarea class="form-input" id="contactMessage" placeholder="Your Message" rows="5" required style="padding-left: 44px;"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Send Message ✈️
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info-card">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📍</div>
+                        <div>
+                            <div class="contact-info-label">Address</div>
+                            <div class="contact-info-text">Sigma University, Ajwa-Nimeta Road,<br />Vadodara, Gujarat – 390019, India</div>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">✉️</div>
+                        <div>
+                            <div class="contact-info-label">Email Us</div>
+                            <div class="contact-info-text">support@internmanage.com<br />info@internmanage.com</div>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">📞</div>
+                        <div>
+                            <div class="contact-info-label">Call Us</div>
+                            <div class="contact-info-text">+91 98765 43210<br />+91 98765 43211</div>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">🕐</div>
+                        <div>
+                            <div class="contact-info-label">Working Hours</div>
+                            <div class="contact-info-text">Monday - Saturday<br />9:00 AM - 6:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- We'd Love to Hear -->
+                <div class="contact-cta-card">
+                    <h3>We'd Love to Hear From You!</h3>
+                    <div class="contact-cta-illustration">💌</div>
+                    <p>Whether you have a question about features, pricing, or anything else, our team is ready to answer all your questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TRUST BADGES ═══ -->
+    <section class="section section--gray">
+        <div class="container">
+            <div class="trust-badges stagger-children animate-on-scroll">
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">⚡</div>
+                    <div>
+                        <div class="trust-badge-title">Quick Support</div>
+                        <div class="trust-badge-text">We reply within 24 hours</div>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">💚</div>
+                    <div>
+                        <div class="trust-badge-title">Trusted Platform</div>
+                        <div class="trust-badge-text">Your trust is our priority</div>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">👥</div>
+                    <div>
+                        <div class="trust-badge-title">Expert Team</div>
+                        <div class="trust-badge-text">We are here to help you</div>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">🤝</div>
+                    <div>
+                        <div class="trust-badge-title">Better Together</div>
+                        <div class="trust-badge-text">Let's build better futures</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🎓 Intern<span>Manage</span></h3>
+                    <p>Empowering internships and helping students build successful careers.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">f</a>
+                        <a href="#" aria-label="Twitter">𝕏</a>
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="how-it-works.html">How It Works</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Students</h4>
+                    <a href="#">Browse Internships</a>
+                    <a href="#">Track Applications</a>
+                    <a href="#">Submit Reports</a>
+                    <a href="#">Certificates</a>
+                </div>
+                <div class="footer-col">
+                    <h4>For Companies</h4>
+                    <a href="#">Post Internship</a>
+                    <a href="#">Manage Applications</a>
+                    <a href="#">Find Talent</a>
+                    <a href="#">Dashboard</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📍</span>
+                        <span>Sigma University, Vadodara,<br />Gujarat – 390019, India</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">✉️</span>
+                        <span>support@internmanage.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📞</span>
+                        <span>+91 98765 43210</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2024 InternManage. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
