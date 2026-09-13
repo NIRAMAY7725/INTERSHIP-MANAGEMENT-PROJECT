@@ -126,32 +126,68 @@ function initNavbarScroll() {
 function initMobileMenu() {
     const toggle = document.querySelector('.navbar-toggle');
     const nav = document.querySelector('.navbar-nav');
-
+    
     if (!toggle || !nav) return;
 
-    toggle.addEventListener('click', () => {
-        toggle.classList.toggle('open');
-        nav.classList.toggle('open');
+    function closeMenu() {
+        toggle.classList.remove('open');
+        nav.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function openMenu() {
+        toggle.classList.add('open');
+        nav.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (toggle.classList.contains('open')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
     });
 
     // Close on nav link click
     nav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            toggle.classList.remove('open');
-            nav.classList.remove('open');
-        });
+        link.addEventListener('click', closeMenu);
     });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+            closeMenu();
+        }
+    });
+    
+    // Swipe to close
+    let touchStartX = 0;
+    nav.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    nav.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX > touchStartX + 50) { // Swiped right
+            closeMenu();
+        }
+    }, {passive: true});
 }
 
 // ── Active Nav Link ────────────────────────────────────────────────
 function setActiveNavLink() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.navbar-nav a');
+    const currentKey = currentPath === '/' ? '/' : currentPath.replace(/\/+$/, '').split('/').pop();
 
     navLinks.forEach(link => {
         link.classList.remove('active');
-        const href = link.getAttribute('href');
-        if (href === currentPath || (currentPath === '/' && href === '/')) {
+        const href = link.getAttribute('href') || '';
+        const hrefKey = href === '/' ? '/' : href.replace(/\/+$/, '').split('/').pop();
+
+        if (href === currentPath || hrefKey === currentKey || (currentPath === '/' && href === '/')) {
             link.classList.add('active');
         }
     });

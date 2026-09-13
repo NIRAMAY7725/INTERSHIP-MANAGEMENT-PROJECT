@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register — InternManage</title>
     <meta name="description" content="Create your InternManage account — join as a student, company, or administrator." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
 
@@ -20,21 +23,21 @@
                 </div>
             </a>
             <div class="navbar-nav" id="navMenu">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="features.html">Features</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="contact.html">Contact</a>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/features">Features</a>
+                <a href="/how-it-works">How It Works</a>
+                <a href="/contact">Contact</a>
             </div>
             <div class="navbar-actions">
                 <div class="navbar-auth">
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                    <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
-                    <a href="login.html" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                    <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -45,7 +48,7 @@
 
     <!-- ═══ REGISTER FORM ═══ -->
     <div class="auth-page">
-        <div class="auth-card" style="max-width: 520px;">
+        <div class="auth-card auth-card-lg">
             <div class="auth-header">
                 <div class="auth-logo">🎓</div>
                 <h2>Create Account</h2>
@@ -54,7 +57,7 @@
 
             <form id="registerForm" class="auth-form">
                 <!-- Role Selector -->
-                <div style="margin-bottom: 24px;">
+                <div class="auth-card-form-group">
                     <label class="form-label">I am a...</label>
                     <div class="role-selector">
                         <div class="role-option selected" data-role="user">
@@ -92,8 +95,8 @@
                     <label class="form-label" for="registerPassword">Password</label>
                     <div class="form-input-icon">
                         <span class="input-icon">🔒</span>
-                        <div class="password-wrapper" style="width: 100%;">
-                            <input type="password" class="form-input" id="registerPassword" placeholder="Create a password (min 6 chars)" required minlength="6" style="padding-left: 44px; padding-right: 44px;" />
+                        <div class="password-wrapper wide">
+                            <input type="password" class="form-input password-input" id="registerPassword" placeholder="Create a password (min 6 chars)" required minlength="6" />
                             <button type="button" class="password-toggle">👁️</button>
                         </div>
                     </div>
@@ -103,17 +106,17 @@
                     <label class="form-label" for="registerConfirmPassword">Confirm Password</label>
                     <div class="form-input-icon">
                         <span class="input-icon">🔒</span>
-                        <div class="password-wrapper" style="width: 100%;">
-                            <input type="password" class="form-input" id="registerConfirmPassword" placeholder="Confirm your password" required minlength="6" style="padding-left: 44px; padding-right: 44px;" />
+                        <div class="password-wrapper wide">
+                            <input type="password" class="form-input password-input" id="registerConfirmPassword" placeholder="Confirm your password" required minlength="6" />
                             <button type="button" class="password-toggle">👁️</button>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 8px;">
-                    <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--gray-500); cursor: pointer;">
-                        <input type="checkbox" required style="accent-color: var(--primary); margin-top: 3px;" />
-                        I agree to the <a href="#" style="color: var(--primary); font-weight: 500;">Terms of Service</a>&nbsp;and&nbsp;<a href="#" style="color: var(--primary); font-weight: 500;">Privacy Policy</a>
+                <div class="auth-card-form-group auth-card-form-min">
+                    <label class="auth-terms">
+                        <input type="checkbox" required />
+                        I agree to the <a href="/terms">Terms of Service</a>&nbsp;and&nbsp;<a href="/privacy">Privacy Policy</a>
                     </label>
                 </div>
 
@@ -123,7 +126,7 @@
             </form>
 
             <div class="auth-footer">
-                Already have an account? <a href="login.html">Sign In</a>
+                Already have an account? <a href="/login">Sign In</a>
             </div>
         </div>
     </div>

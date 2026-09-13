@@ -1,0 +1,280 @@
+/* Mobile-first overrides for LAN/mobile access */
+@media (max-width: 980px) {
+    .navbar-nav,
+    .navbar-auth,
+    .navbar-user {
+        display: none !important;
+    }
+
+    .navbar-toggle {
+        display: flex !important;
+    }
+
+    .navbar-brand-text p {
+        display: none !important;
+    }
+
+    .navbar .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .navbar-brand {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .hero .container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .hero-content,
+    .hero-image {
+        width: 100%;
+    }
+
+    .hero-actions,
+    .hero-stats {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-stat {
+        width: 100%;
+    }
+
+    .footer-grid,
+    .stats-banner,
+    .grid-3,
+    .values-grid,
+    .roles-grid,
+    .contact-grid,
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid,
+    .highlights-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --section-padding: 52px 0;
+    }
+
+    body {
+        min-width: 320px;
+        overflow-x: hidden;
+        padding-bottom: 0;
+    }
+
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .navbar {
+        position: sticky;
+        top: 0;
+    }
+
+    .navbar .container {
+        height: 68px;
+        gap: 12px;
+    }
+
+    .navbar-brand {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .navbar-brand-text {
+        min-width: 0;
+    }
+
+    .navbar-brand-text h1 {
+        font-size: 1.1rem;
+        white-space: nowrap;
+    }
+
+    .navbar-brand-text p {
+        font-size: 0.62rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .navbar-nav {
+        display: none !important;
+    }
+
+    .navbar-auth {
+        display: none !important;
+    }
+
+    .navbar-toggle {
+        display: flex !important;
+    }
+
+    .navbar-user {
+        display: none !important;
+    }
+
+    .hero {
+        padding-top: 32px;
+    }
+
+    .hero .container {
+        grid-template-columns: 1fr;
+        display: grid;
+        gap: 28px;
+    }
+
+    .hero-content,
+    .hero-image {
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: clamp(2.1rem, 8vw, 3.1rem);
+        line-height: 1.08;
+    }
+
+    .hero-text {
+        font-size: 0.98rem;
+        max-width: 100%;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero-actions .btn,
+    .btn,
+    .auth-card button,
+    .btn-primary,
+    .btn-outline {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .hero-stat {
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .step-arrow {
+        display: none;
+    }
+
+    .grid-3,
+    .values-grid,
+    .roles-grid,
+    .features-grid,
+    .stats-banner,
+    .footer-grid,
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .cta-banner-inline {
+        width: 100%;
+    }
+
+    .footer {
+        padding: 28px 0 18px;
+    }
+
+    .footer-grid {
+        gap: 18px;
+    }
+
+    .footer-brand,
+    .footer-col {
+        min-width: 0;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .footer-bottom-links {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .auth-card {
+        padding: 20px 16px;
+    }
+
+    .auth-card-title {
+        font-size: 1.7rem;
+    }
+
+    .auth-card-grid,
+    .auth-card-row,
+    .form-row {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .password-wrapper {
+        width: 100%;
+    }
+
+    .dashboard-loading-page {
+        min-height: 100vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand-text p {
+        display: none;
+    }
+
+    .navbar-brand {
+        max-width: 180px;
+    }
+
+    .section-badge {
+        font-size: 0.72rem;
+        padding: 7px 14px;
+    }
+
+    .hero-actions .btn,
+    .btn,
+    .auth-card button {
+        min-height: 46px;
+    }
+
+    .footer-social a {
+        width: 40px;
+        height: 40px;
+    }
+}

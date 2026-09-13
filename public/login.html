@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login — InternManage</title>
     <meta name="description" content="Sign in to your InternManage account to manage internships, applications, and more." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
 
@@ -20,21 +23,21 @@
                 </div>
             </a>
             <div class="navbar-nav" id="navMenu">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="features.html">Features</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="contact.html">Contact</a>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/features">Features</a>
+                <a href="/how-it-works">How It Works</a>
+                <a href="/contact">Contact</a>
             </div>
             <div class="navbar-actions">
                 <div class="navbar-auth">
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                    <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
-                    <a href="login.html" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                    <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -65,19 +68,19 @@
                     <label class="form-label" for="loginPassword">Password</label>
                     <div class="form-input-icon">
                         <span class="input-icon">🔒</span>
-                        <div class="password-wrapper" style="width: 100%;">
-                            <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required minlength="6" style="padding-left: 44px; padding-right: 44px;" />
+                        <div class="password-wrapper wide">
+                            <input type="password" class="form-input password-input" id="loginPassword" placeholder="Enter your password" required minlength="6" />
                             <button type="button" class="password-toggle">👁️</button>
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--gray-500); cursor: pointer;">
-                        <input type="checkbox" style="accent-color: var(--primary);" />
+                <div class="auth-check-row">
+                    <label class="auth-check-label">
+                        <input type="checkbox" />
                         Remember me
                     </label>
-                    <a href="#" style="font-size: 0.85rem; color: var(--primary); font-weight: 500;">Forgot password?</a>
+                    <a href="/" class="auth-link-inline">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -86,7 +89,7 @@
             </form>
 
             <div class="auth-footer">
-                Don't have an account? <a href="register.html">Sign Up</a>
+                Don't have an account? <a href="/register">Sign Up</a>
             </div>
         </div>
     </div>

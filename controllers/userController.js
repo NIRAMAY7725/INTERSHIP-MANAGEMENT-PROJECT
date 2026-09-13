@@ -1,10 +1,30 @@
 const User = require("../models/User");
 
-// GET all users
+// GET all users — supports pagination: ?page=1&limit=20
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users);
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            User.find()
+                .select("-password -__v")
+                .skip(skip)
+                .limit(limit)
+                .lean(),
+            User.countDocuments(),
+        ]);
+
+        res.json({
+            users,
+            pagination: {
+                page,
+                limit,
+                total,
+                pages: Math.ceil(total / limit),
+            },
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -13,7 +33,7 @@ const getAllUsers = async (req, res) => {
 // GET one user by ID
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).select("-password -__v").lean();
         if (!user) return res.status(404).json({ error: "User not found" });
         res.json(user);
     } catch (error) {

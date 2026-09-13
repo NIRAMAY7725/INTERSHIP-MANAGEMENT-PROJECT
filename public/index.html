@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>InternManage — Online Internship Management Portal</title>
     <meta name="description" content="A one-stop solution for students, companies, and colleges to manage internships efficiently and seamlessly." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
-
     <!-- ═══ NAVBAR ═══ -->
     <nav class="navbar" id="navbar">
         <div class="container">
@@ -21,22 +23,22 @@
             </a>
 
             <div class="navbar-nav" id="navMenu">
-                <a href="index.html" class="active">Home</a>
-                <a href="about.html">About</a>
-                <a href="features.html">Features</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="contact.html">Contact</a>
+                <a href="/" class="active">Home</a>
+                <a href="/about">About</a>
+                <a href="/features">Features</a>
+                <a href="/how-it-works">How It Works</a>
+                <a href="/contact">Contact</a>
             </div>
 
             <div class="navbar-actions">
                 <div class="navbar-auth">
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                    <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
-                    <a href="login.html" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                    <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -59,8 +61,8 @@
                     to manage internships efficiently and seamlessly.
                 </p>
                 <div class="hero-actions">
-                    <a href="register.html" class="btn btn-primary btn-lg">Get Started →</a>
-                    <a href="how-it-works.html" class="btn btn-outline btn-lg">Learn More ⓘ</a>
+                    <a href="/register" class="btn btn-primary btn-lg">Get Started →</a>
+                    <a href="/how-it-works" class="btn btn-outline btn-lg">Learn More ⓘ</a>
                 </div>
                 <div class="hero-stats">
                     <div class="hero-stat">
@@ -87,64 +89,64 @@
                 </div>
             </div>
             <div class="hero-image float-animation">
-                <div style="background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); padding: 32px; width: 100%; max-width: 480px;">
+                <div class="hero-dashboard-mockup">
                     <!-- Dashboard Mockup -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-900);">Dashboard</h3>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="padding: 8px 16px; border-radius: var(--radius-sm); background: var(--gray-100); font-size: 0.8rem; color: var(--gray-500);">🔍 Search internships...</div>
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">👤</div>
+                    <div class="mockup-header">
+                        <h3>Dashboard</h3>
+                        <div class="mockup-header-actions">
+                            <div class="mockup-search">🔍 Search internships...</div>
+                            <div class="mockup-avatar">👤</div>
                         </div>
                     </div>
                     <!-- Sidebar + Content -->
-                    <div style="display: flex; gap: 16px;">
-                        <div style="width: 140px; display: flex; flex-direction: column; gap: 4px;">
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); background: var(--primary); color: white; font-size: 0.8rem; font-weight: 600;">📊 Dashboard</div>
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">💼 Internships</div>
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">📄 Applications</div>
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">📝 Reports</div>
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">💬 Messages</div>
-                            <div style="padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--gray-500);">👤 Profile</div>
+                    <div class="mockup-body">
+                        <div class="mockup-sidebar">
+                            <div class="mockup-nav-item active">📊 Dashboard</div>
+                            <div class="mockup-nav-item">💼 Internships</div>
+                            <div class="mockup-nav-item">📄 Applications</div>
+                            <div class="mockup-nav-item">📝 Reports</div>
+                            <div class="mockup-nav-item">💬 Messages</div>
+                            <div class="mockup-nav-item">👤 Profile</div>
                         </div>
-                        <div style="flex: 1;">
+                        <div class="mockup-content">
                             <!-- Stats Row -->
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;">
-                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
-                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">128</div>
-                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Total Internships</div>
+                            <div class="mockup-stats-grid">
+                                <div class="mockup-stat-card">
+                                    <div class="mockup-stat-value">128</div>
+                                    <div class="mockup-stat-label">Total Internships</div>
                                 </div>
-                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
-                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">234</div>
-                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Applications</div>
+                                <div class="mockup-stat-card">
+                                    <div class="mockup-stat-value">234</div>
+                                    <div class="mockup-stat-label">Applications</div>
                                 </div>
-                                <div style="padding: 14px; border-radius: var(--radius-sm); background: var(--primary-light); text-align: center;">
-                                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">56</div>
-                                    <div style="font-size: 0.65rem; color: var(--gray-500);">Ongoing</div>
+                                <div class="mockup-stat-card">
+                                    <div class="mockup-stat-value">56</div>
+                                    <div class="mockup-stat-label">Ongoing</div>
                                 </div>
                             </div>
                             <!-- Recent List -->
-                            <div style="font-size: 0.8rem; font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">Recent Internships</div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                            <div class="mockup-recent-title">Recent Internships</div>
+                            <div class="mockup-recent-list">
+                                <div class="mockup-recent-item">
                                     <div>
-                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">Web Development Intern</div>
-                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Tech Solutions Pvt. Ltd.</div>
+                                        <div class="mockup-item-title">Web Development Intern</div>
+                                        <div class="mockup-item-subtitle">Tech Solutions Pvt. Ltd.</div>
                                     </div>
-                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: var(--primary-light); color: var(--primary); font-size: 0.65rem; font-weight: 600;">Full Stack</span>
+                                    <span class="mockup-tag tag-primary">Full Stack</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                                <div class="mockup-recent-item">
                                     <div>
-                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">UI/UX Design Intern</div>
-                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Creative Minds Agency</div>
+                                        <div class="mockup-item-title">UI/UX Design Intern</div>
+                                        <div class="mockup-item-subtitle">Creative Minds Agency</div>
                                     </div>
-                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: #FEF3C7; color: #92400E; font-size: 0.65rem; font-weight: 600;">Design</span>
+                                    <span class="mockup-tag tag-warning">Design</span>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm);">
+                                <div class="mockup-recent-item">
                                     <div>
-                                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--gray-800);">Data Science Intern</div>
-                                        <div style="font-size: 0.65rem; color: var(--gray-400);">Data Insights</div>
+                                        <div class="mockup-item-title">Data Science Intern</div>
+                                        <div class="mockup-item-subtitle">Data Insights</div>
                                     </div>
-                                    <span style="padding: 3px 10px; border-radius: var(--radius-pill); background: #D1FAE5; color: #065F46; font-size: 0.65rem; font-weight: 600;">Data Science</span>
+                                    <span class="mockup-tag tag-success">Data Science</span>
                                 </div>
                             </div>
                         </div>
@@ -158,41 +160,41 @@
     <section class="section" id="howItWorks">
         <div class="container text-center">
             <h2 class="section-title animate-on-scroll">How It Works</h2>
-            <div class="section-divider" style="margin: 16px auto 8px;"></div>
+            <div class="section-divider page-compact-divider"></div>
         </div>
         <div class="container">
             <div class="steps animate-on-scroll stagger-children">
                 <div class="step">
                     <div class="step-icon">👤</div>
-                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 1</div>
+                    <div class="step-kicker">Step 1</div>
                     <div class="step-title">Register</div>
                     <p class="step-text">Create your account as student, company or admin.</p>
                 </div>
                 <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-icon">🔍</div>
-                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 2</div>
+                    <div class="step-kicker">Step 2</div>
                     <div class="step-title">Browse</div>
                     <p class="step-text">Explore internships and opportunities available.</p>
                 </div>
                 <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-icon">📝</div>
-                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 3</div>
+                    <div class="step-kicker">Step 3</div>
                     <div class="step-title">Apply</div>
                     <p class="step-text">Apply for internships that match your skills.</p>
                 </div>
                 <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-icon">📋</div>
-                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 4</div>
+                    <div class="step-kicker">Step 4</div>
                     <div class="step-title">Review</div>
                     <p class="step-text">Companies review applications and shortlist candidates.</p>
                 </div>
                 <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-icon">⚙️</div>
-                    <div style="font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Step 5</div>
+                    <div class="step-kicker">Step 5</div>
                     <div class="step-title">Manage</div>
                     <p class="step-text">Manage progress, reports and get certificates.</p>
                 </div>
@@ -204,7 +206,7 @@
     <section class="section section--gray">
         <div class="container text-center">
             <h2 class="section-title animate-on-scroll">Who Can Use This Portal?</h2>
-            <div class="section-divider" style="margin: 16px auto 40px;"></div>
+            <div class="section-divider page-large-divider"></div>
         </div>
         <div class="container">
             <div class="grid-3 stagger-children animate-on-scroll">
@@ -212,19 +214,19 @@
                     <div class="role-card-icon student">👨‍🎓</div>
                     <h3 class="role-card-title">For Students</h3>
                     <p class="role-card-text">Find and apply for internships, track applications, submit reports and get certificates.</p>
-                    <a href="register.html" class="card-link">Get Started →</a>
+                    <a href="/register" class="card-link">Get Started →</a>
                 </div>
                 <div class="role-card">
                     <div class="role-card-icon company">🏢</div>
                     <h3 class="role-card-title">For Companies</h3>
                     <p class="role-card-text">Post internship opportunities, review applications, manage interns and provide certificates.</p>
-                    <a href="register.html" class="card-link">Get Started →</a>
+                    <a href="/register" class="card-link">Get Started →</a>
                 </div>
                 <div class="role-card">
                     <div class="role-card-icon admin">🛡️</div>
                     <h3 class="role-card-title">For Administrators</h3>
                     <p class="role-card-text">Manage students, companies, internships, approvals and generate reports.</p>
-                    <a href="register.html" class="card-link">Get Started →</a>
+                    <a href="/register" class="card-link">Get Started →</a>
                 </div>
             </div>
         </div>
@@ -234,14 +236,14 @@
     <section class="section">
         <div class="container">
             <div class="cta-banner animate-on-scroll">
-                <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="cta-banner-inline">
                     <div class="cta-banner-icon">🚀</div>
                     <div class="cta-banner-content">
                         <h3>Ready to get started?</h3>
                         <p>Join thousands of students and companies using our platform.</p>
                     </div>
                 </div>
-                <a href="register.html" class="btn btn-white">Register Now →</a>
+                <a href="/register" class="btn btn-white">Register Now →</a>
             </div>
         </div>
     </section>
@@ -254,33 +256,33 @@
                     <h3>🎓 Intern<span>Manage</span></h3>
                     <p>Empowering internships and helping students build successful careers.</p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Facebook">f</a>
-                        <a href="#" aria-label="Twitter">𝕏</a>
-                        <a href="#" aria-label="LinkedIn">in</a>
-                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="/" aria-label="Facebook">f</a>
+                        <a href="/" aria-label="Twitter">𝕏</a>
+                        <a href="/" aria-label="LinkedIn">in</a>
+                        <a href="/" aria-label="Instagram">📷</a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
                     <a href="/">Home</a>
-                    <a href="about.html">About Us</a>
-                    <a href="features.html">Features</a>
-                    <a href="how-it-works.html">How It Works</a>
-                    <a href="contact.html">Contact Us</a>
+                    <a href="/about">About Us</a>
+                    <a href="/features">Features</a>
+                    <a href="/how-it-works">How It Works</a>
+                    <a href="/contact">Contact Us</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Students</h4>
-                    <a href="internship-listings.html">Browse Internships</a>
-                    <a href="applications.html">Track Applications</a>
-                    <a href="reports.html">Submit Reports</a>
-                    <a href="my-certificates.html">Certificates</a>
+                    <a href="/">Browse Internships</a>
+                    <a href="/">Track Applications</a>
+                    <a href="/">Submit Reports</a>
+                    <a href="/">Certificates</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Companies</h4>
-                    <a href="post-internship.html">Post Internship</a>
-                    <a href="applications.html">Manage Applications</a>
-                    <a href="#">Find Talent</a>
-                    <a href="dashboard.html">Dashboard</a>
+                    <a href="/">Post Internship</a>
+                    <a href="/">Manage Applications</a>
+                    <a href="/">Find Talent</a>
+                    <a href="/">Dashboard</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contact Us</h4>
@@ -301,8 +303,8 @@
             <div class="footer-bottom">
                 <span>© 2024 InternManage. All rights reserved.</span>
                 <div class="footer-bottom-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms & Conditions</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms & Conditions</a>
                 </div>
             </div>
         </div>

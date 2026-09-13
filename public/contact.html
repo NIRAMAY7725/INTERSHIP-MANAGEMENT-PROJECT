@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Us — InternManage</title>
     <meta name="description" content="Have questions or need support? Contact the InternManage team — we're here to help!" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
 
@@ -20,21 +23,21 @@
                 </div>
             </a>
             <div class="navbar-nav" id="navMenu">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="features.html">Features</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="contact.html" class="active">Contact</a>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/features">Features</a>
+                <a href="/how-it-works">How It Works</a>
+                <a href="/contact" class="active">Contact</a>
             </div>
             <div class="navbar-actions">
                 <div class="navbar-auth">
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                    <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
-                    <a href="#" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                    <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -59,14 +62,14 @@
                 </p>
             </div>
             <div class="hero-image float-animation">
-                <div style="background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); padding: 32px; text-align: center; max-width: 360px;">
-                    <div style="font-size: 4rem; margin-bottom: 12px;">👩‍💻</div>
-                    <div style="font-size: 1rem; font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">24/7 Support</div>
-                    <div style="font-size: 0.85rem; color: var(--gray-500);">Our team is ready to help you</div>
-                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 16px;">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">💬</div>
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">✉️</div>
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center;">📞</div>
+                <div class="contact-support-panel">
+                    <div class="support-emoji">👩‍💻</div>
+                    <div class="support-title">24/7 Support</div>
+                    <div class="support-subtitle">Our team is ready to help you</div>
+                    <div class="support-icons">
+                        <div class="support-icon">💬</div>
+                        <div class="support-icon">✉️</div>
+                        <div class="support-icon">📞</div>
                     </div>
                 </div>
             </div>
@@ -103,11 +106,11 @@
                         </div>
                         <div class="form-group">
                             <div class="form-input-icon">
-                                <span class="input-icon" style="top: 20px; transform: none;">✏️</span>
-                                <textarea class="form-input" id="contactMessage" placeholder="Your Message" rows="5" required style="padding-left: 44px;"></textarea>
+                                <span class="input-icon input-icon-top">✏️</span>
+                                <textarea class="form-input textarea-with-icon" id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <button type="submit" class="btn btn-primary full-width-btn">
                             Send Message ✈️
                         </button>
                     </form>
@@ -200,33 +203,33 @@
                     <h3>🎓 Intern<span>Manage</span></h3>
                     <p>Empowering internships and helping students build successful careers.</p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Facebook">f</a>
-                        <a href="#" aria-label="Twitter">𝕏</a>
-                        <a href="#" aria-label="LinkedIn">in</a>
-                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="/" aria-label="Facebook">f</a>
+                        <a href="/" aria-label="Twitter">𝕏</a>
+                        <a href="/" aria-label="LinkedIn">in</a>
+                        <a href="/" aria-label="Instagram">📷</a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
-                    <a href="index.html">Home</a>
-                    <a href="about.html">About Us</a>
-                    <a href="features.html">Features</a>
-                    <a href="how-it-works.html">How It Works</a>
-                    <a href="contact.html">Contact Us</a>
+                    <a href="/">Home</a>
+                    <a href="/about">About Us</a>
+                    <a href="/features">Features</a>
+                    <a href="/how-it-works">How It Works</a>
+                    <a href="/contact">Contact Us</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Students</h4>
-                    <a href="#">Browse Internships</a>
-                    <a href="#">Track Applications</a>
-                    <a href="#">Submit Reports</a>
-                    <a href="#">Certificates</a>
+                    <a href="/">Browse Internships</a>
+                    <a href="/">Track Applications</a>
+                    <a href="/">Submit Reports</a>
+                    <a href="/">Certificates</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Companies</h4>
-                    <a href="#">Post Internship</a>
-                    <a href="#">Manage Applications</a>
-                    <a href="#">Find Talent</a>
-                    <a href="#">Dashboard</a>
+                    <a href="/">Post Internship</a>
+                    <a href="/">Manage Applications</a>
+                    <a href="/">Find Talent</a>
+                    <a href="/">Dashboard</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contact Us</h4>
@@ -247,8 +250,8 @@
             <div class="footer-bottom">
                 <span>© 2024 InternManage. All rights reserved.</span>
                 <div class="footer-bottom-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms & Conditions</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms & Conditions</a>
                 </div>
             </div>
         </div>

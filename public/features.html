@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Features — InternManage</title>
     <meta name="description" content="Explore the powerful features of InternManage — user management, internship listings, application tracking, certificates, and more." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
 
@@ -20,21 +23,21 @@
                 </div>
             </a>
             <div class="navbar-nav" id="navMenu">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="features.html" class="active">Features</a>
-                <a href="how-it-works.html">How It Works</a>
-                <a href="contact.html">Contact</a>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/features" class="active">Features</a>
+                <a href="/how-it-works">How It Works</a>
+                <a href="/contact">Contact</a>
             </div>
             <div class="navbar-actions">
                 <div class="navbar-auth">
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                    <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
-                    <a href="#" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
+                    <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -51,8 +54,8 @@
                 Powerful Features for Seamless<br />
                 <span>Internship Management</span>
             </h1>
-            <div class="section-divider" style="margin: 16px auto 20px;"></div>
-            <p class="section-subtitle" style="margin: 0 auto;">
+            <div class="section-divider center-sm"></div>
+            <p class="section-subtitle feature-subtitle-center">
                 InternManage offers a complete set of features to help students, companies, and
                 institutions manage internships efficiently in one place.
             </p>
@@ -63,7 +66,7 @@
     <section class="section">
         <div class="container text-center">
             <h2 class="section-title animate-on-scroll">Everything You Need, All in One Place</h2>
-            <div class="section-divider" style="margin: 16px auto 48px;"></div>
+            <div class="section-divider center-lg"></div>
         </div>
         <div class="container">
             <!-- Row 1 - 4 Features -->
@@ -91,7 +94,7 @@
             </div>
 
             <!-- Row 2 - 4 Features -->
-            <div class="feature-grid stagger-children animate-on-scroll" style="margin-top: 24px;">
+            <div class="feature-grid feature-grid-spaced stagger-children animate-on-scroll">
                 <div class="feature-card">
                     <div class="feature-card-icon">📄</div>
                     <h3 class="feature-card-title">Report Submission</h3>
@@ -119,7 +122,7 @@
     <!-- ═══ BOTTOM HIGHLIGHTS ═══ -->
     <section class="section section--gray">
         <div class="container">
-            <div class="highlights-row stagger-children animate-on-scroll" style="border-top: none; padding-top: 0;">
+            <div class="highlights-row highlights-row-clean stagger-children animate-on-scroll">
                 <div class="highlight-item">
                     <div class="highlight-icon">🔒</div>
                     <div>
@@ -156,14 +159,14 @@
     <section class="section">
         <div class="container">
             <div class="cta-banner animate-on-scroll">
-                <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="cta-banner-inline">
                     <div class="cta-banner-icon">🚀</div>
                     <div class="cta-banner-content">
                         <h3>Start using these features today!</h3>
                         <p>Create your free account and experience seamless internship management.</p>
                     </div>
                 </div>
-                <a href="register.html" class="btn btn-white">Register Now →</a>
+                <a href="/register" class="btn btn-white">Register Now →</a>
             </div>
         </div>
     </section>
@@ -176,33 +179,33 @@
                     <h3>🎓 Intern<span>Manage</span></h3>
                     <p>Empowering internships and helping students build successful careers.</p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Facebook">f</a>
-                        <a href="#" aria-label="Twitter">𝕏</a>
-                        <a href="#" aria-label="LinkedIn">in</a>
-                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="/" aria-label="Facebook">f</a>
+                        <a href="/" aria-label="Twitter">𝕏</a>
+                        <a href="/" aria-label="LinkedIn">in</a>
+                        <a href="/" aria-label="Instagram">📷</a>
                     </div>
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
-                    <a href="index.html">Home</a>
-                    <a href="about.html">About Us</a>
-                    <a href="features.html">Features</a>
-                    <a href="how-it-works.html">How It Works</a>
-                    <a href="contact.html">Contact Us</a>
+                    <a href="/">Home</a>
+                    <a href="/about">About Us</a>
+                    <a href="/features">Features</a>
+                    <a href="/how-it-works">How It Works</a>
+                    <a href="/contact">Contact Us</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Students</h4>
-                    <a href="internship-listings.html">Browse Internships</a>
-                    <a href="">Track Applications</a>
-                    <a href="">Submit Reports</a>
-                    <a href="">Certificates</a>
+                    <a href="/">Browse Internships</a>
+                    <a href="/">Track Applications</a>
+                    <a href="/">Submit Reports</a>
+                    <a href="/">Certificates</a>
                 </div>
                 <div class="footer-col">
                     <h4>For Companies</h4>
-                    <a href="#">Post Internship</a>
-                    <a href="#">Manage Applications</a>
-                    <a href="#">Find Talent</a>
-                    <a href="#">Dashboard</a>
+                    <a href="/">Post Internship</a>
+                    <a href="/">Manage Applications</a>
+                    <a href="/">Find Talent</a>
+                    <a href="/">Dashboard</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contact Us</h4>
@@ -223,8 +226,8 @@
             <div class="footer-bottom">
                 <span>© 2024 InternManage. All rights reserved.</span>
                 <div class="footer-bottom-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms & Conditions</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms & Conditions</a>
                 </div>
             </div>
         </div>

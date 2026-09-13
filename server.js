@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
+const os = require("os");
 const cors = require("cors");
 const helmet = require("helmet");
+const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
@@ -15,9 +17,28 @@ const contactRouter = require("./routes/contactRoute");
 
 const app = express();
 
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                imgSrc: ["'self'", "data:", "https:"],
+                styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+                fontSrc: ["'self'", "https:", "data:"],
+                connectSrc: ["'self'", "https:"],
+                mediaSrc: ["'self'", "https:", "data:"],
+                objectSrc: ["'none'"],
+                frameSrc: ["'self'", "https:"],
+                upgradeInsecureRequests: [],
+            },
+        },
+    })
+);
+
 // Middleware
-app.use(helmet());
 app.use(cors());
+app.use(compression()); // gzip/brotli — ~70% smaller responses for mobile
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,8 +50,18 @@ const authLimiter = rateLimit({
 });
 app.use("/api/auth", authLimiter);
 
-// Serve static files from public folder (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "public")));
+// Serve static files with long cache (1 year for hashed assets, 1 day for HTML)
+app.use(
+    express.static(path.join(__dirname, "public"), {
+        maxAge: "1d",
+        etag: true,
+        lastModified: true,
+    })
+);
+
+// API performance middleware (response timing + cache hints)
+const { apiOptimize } = require("./middleware/apiOptimize");
+app.use("/api", apiOptimize);
 
 // API Routes
 app.use("/api/users", userRouter);
@@ -66,7 +97,17 @@ app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "register.html"));
 });
 
-const PORT = process.env.PORT || 5000;
+app.get("/privacy", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "privacy.html"));
+});
+
+app.get("/terms", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "terms.html"));
+});
+
+const PORT = 5000;
+const HOST = "0.0.0.0";
+const LOCAL_URL = `http://localhost:${PORT}`;
 
 // Connect to DB first, then seed a test user, then start server
 const startServer = async () => {
@@ -84,9 +125,27 @@ const startServer = async () => {
         console.log("✅ Test user seeded into database");
     }
 
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
+    const server = app.listen(PORT, HOST, () => {
+        console.log(`🚀 Server running on ${LOCAL_URL}`);
+
+        // Log LAN URL for phone testing
+        const nets = os.networkInterfaces();
+        for (const name of Object.keys(nets)) {
+            for (const net of nets[name]) {
+                if (net.family === "IPv4" && !net.internal) {
+                    console.log(`📱 LAN access: http://${net.address}:${PORT}`);
+                }
+            }
+        }
+    });
+
+    server.on("error", (error) => {
+        console.error(`❌ Server could not start on ${HOST}:${PORT}:`, error.message);
+        process.exit(1);
     });
 };
 
-startServer();
+startServer().catch((error) => {
+    console.error("❌ Server startup failed:", error);
+    process.exit(1);
+});
