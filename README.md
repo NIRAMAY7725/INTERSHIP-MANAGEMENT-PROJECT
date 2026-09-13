@@ -206,3 +206,12 @@ ISC
 ## 👤 Author
 
 **Niramay** — [@NIRAMAY7725](https://github.com/NIRAMAY7725)
+
+
+<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_28 PM" src="https://github.com/user-attachments/assets/bc92b44f-7b5e-4d32-8091-4b991382df92" />
+<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_35 PM" src="https://github.com/user-attachments/assets/069b78a1-aac3-4efc-b376-6df0ba997157" />
+<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_47 PM" src="https://github.com/user-attachments/assets/cecb577b-a43b-4af5-878d-92ed5b64318b" />
+<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_09_09 PM" src="https://github.com/user-attachments/assets/f8d05017-dcbe-49cf-b1f1-7733497622ca" />
+<img width="1402" height="1122" alt="ChatGPT Image Aug 6, 2026, 09_14_09 PM" src="https://github.com/user-attachments/assets/58e7a2b0-87bb-475b-8bf3-e4ab3b31904a" />
+<img width="1536" height="1024" alt="ChatGPT Image Aug 9, 2026, 08_57_21 PM" src="https://github.com/user-attachments/assets/370049df-bd6d-415b-bf0a-a9839ea847d9" />
+
