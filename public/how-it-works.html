@@ -4,15 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How It Works — InternManage</title>
+
+    <!--
+        SEO meta description — kept short and punchy (~155 chars).
+        Main keyword we're targeting is "internship management" since
+        that's what people actually search for when looking for tools
+        like this. Don't stuff more keywords here, it looks spammy.
+    -->
     <meta name="description" content="Learn how InternManage connects students, companies, and institutions to make internship management hassle-free." />
+
+    <!--
+        iOS PWA tweaks — black-translucent lets the status bar overlay
+        blend with the hero gradient background. Without this the iOS
+        status bar shows as a plain white block which breaks the look.
+    -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!--
+        Two stylesheets:
+          style.css  — global design tokens, resets, navbar, buttons,
+                       cards, hero, forms, footer... basically everything
+          mobile.css — responsive overrides for smaller viewports only,
+                       kept separate so the main sheet stays readable
+    -->
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
 
-    <!-- ═══ NAVBAR ═══ -->
+    <!--
+        ================================================================
+        NAVBAR
+        ================================================================
+        Fixed to the top — position:fixed in style.css. The JS in
+        app.js listens to the scroll event and adds a "scrolled" class
+        once the user scrolls past 20px, which kicks in the drop shadow
+        so the bar looks lifted off the content.
+
+        Auth state is managed in localStorage by the Auth object in
+        app.js. On DOMContentLoaded, updateAuthUI() runs and decides
+        which block to show:
+          .navbar-auth  → guest user (Login + Register buttons)
+          .navbar-user  → logged-in user (avatar + name + Logout)
+
+        The "active" class on the how-it-works link is hard-coded here
+        as a fallback but setActiveNavLink() in app.js also derives it
+        from window.location.pathname at runtime to handle edge cases.
+        ================================================================
+    -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="/" class="navbar-brand">
@@ -30,15 +70,30 @@
                 <a href="/contact">Contact</a>
             </div>
             <div class="navbar-actions">
+                <!-- Shown only when NOT logged in -->
                 <div class="navbar-auth">
                     <a href="/login" class="btn btn-outline btn-sm">Login</a>
                     <a href="/register" class="btn btn-primary btn-sm">Register</a>
                 </div>
+
+                <!--
+                    Shown only when logged in. The avatar div displays
+                    the first letter of the user's name (set by JS).
+                    updateAuthUI() in app.js handles swapping this
+                    in and out based on the token in localStorage.
+                -->
                 <div class="navbar-user" id="navUser">
                     <div class="navbar-user-avatar">N</div>
                     <span class="navbar-user-name">User</span>
                     <a href="/login" id="logoutBtn" class="btn btn-outline btn-sm">Logout</a>
                 </div>
+
+                <!--
+                    Hamburger — three <span> lines. When menu opens,
+                    CSS transforms rotate the top/bottom into an X
+                    and fades out the middle line.
+                    Only visible below the mobile breakpoint.
+                -->
                 <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
                 </button>
@@ -46,14 +101,32 @@
         </div>
     </nav>
 
-    <!-- ═══ HERO ═══ -->
+    <!--
+        ================================================================
+        HERO — compact variant (inner page)
+        ================================================================
+        Inner pages use .hero-compact because they don't need the full
+        two-column hero layout (text left, dashboard mockup right) that
+        the home page has. Just a centered text block with a badge,
+        title, thin divider, and a short subtitle.
+
+        The gradient background comes from style.css:
+          background: linear-gradient(180deg, --primary-light 0%, --white 100%)
+        It fades from the light indigo at the top to plain white at the
+        bottom so the transition into the next section is smooth.
+        ================================================================
+    -->
     <section class="hero hero-compact">
         <div class="container">
             <div class="hero-content">
+                <!-- Small pill label — visual anchor so users know
+                     exactly which page they landed on -->
                 <div class="section-badge">⭐ How It Works</div>
                 <h1 class="hero-title hero-title-lg">
                     How <span>InternManage</span> Works
                 </h1>
+                <!-- Thin colored bar under the heading — just a design
+                     detail, pulls from --primary color token -->
                 <div class="section-divider center-sm"></div>
                 <p class="hero-text feature-subtitle-center">
                     Our simple and efficient process connects students, companies, and institutions
@@ -63,10 +136,32 @@
         </div>
     </section>
 
-    <!-- ═══ 6-STEP TIMELINE ═══ -->
+    <!--
+        ================================================================
+        6-STEP PROCESS TIMELINE
+        ================================================================
+        Walks through the full internship lifecycle in order:
+          1. Register → 2. Browse → 3. Apply → 4. Review →
+          5. Approve → 6. Complete & Certify
+
+        Layout: flex row with alternating step cards and connector
+        arrows. The connectors (.timeline-connector) are just "- - →"
+        text nodes styled in CSS — may swap for SVG arrows later if
+        the design needs it.
+
+        Scroll animation:
+          .animate-on-scroll — IntersectionObserver in app.js watches
+          this and adds .visible when it enters viewport (10% threshold,
+          50px bottom margin so it fires a bit before fully in view).
+          .stagger-children — makes each child card animate in with a
+          cascading delay instead of all appearing at the same time.
+        ================================================================
+    -->
     <section class="section">
         <div class="container">
             <div class="timeline animate-on-scroll stagger-children">
+                <!-- Step 1: Account creation — entry point for all user types.
+                     Students, companies, and admins all start here. -->
                 <div class="timeline-step">
                     <div class="timeline-number">1</div>
                     <div class="timeline-step-icon">👤</div>
@@ -74,6 +169,8 @@
                     <p class="timeline-step-text">Students, companies, and admins register on the platform with their details.</p>
                 </div>
                 <div class="timeline-connector">- - →</div>
+                <!-- Step 2: Discovery — students browse what's on offer.
+                     No login required to browse (by design, keeps friction low). -->
                 <div class="timeline-step">
                     <div class="timeline-number">2</div>
                     <div class="timeline-step-icon">🔍</div>
@@ -81,6 +178,8 @@
                     <p class="timeline-step-text">Students can browse available internships posted by registered companies.</p>
                 </div>
                 <div class="timeline-connector">- - →</div>
+                <!-- Step 3: Application submitted — student sends their
+                     profile/resume to the company through the platform. -->
                 <div class="timeline-step">
                     <div class="timeline-number">3</div>
                     <div class="timeline-step-icon">📝</div>
@@ -88,31 +187,58 @@
                     <p class="timeline-step-text">Students apply for internships that match their skills and interests.</p>
                 </div>
                 <div class="timeline-connector">- - →</div>
+                <!-- Step 4: Company-side action — they go through the applicant
+                     list and move people to shortlisted / rejected status. -->
                 <div class="timeline-step">
                     <div class="timeline-number">4</div>
                     <div class="timeline-step-icon">📋</div>
-                    <h3 class="timeline-step-title">Review & Shortlist</h3>
+                    <h3 class="timeline-step-title">Review &amp; Shortlist</h3>
                     <p class="timeline-step-text">Companies review applications and shortlist candidates who best fit the role.</p>
                 </div>
                 <div class="timeline-connector">- - →</div>
+                <!--
+                    Step 5: Final approval. "if required" is key here —
+                    some institutions want admin sign-off on every placement,
+                    others let companies decide entirely on their own.
+                    The admin approval step is optional and configurable.
+                -->
                 <div class="timeline-step">
                     <div class="timeline-number">5</div>
                     <div class="timeline-step-icon">⭐</div>
-                    <h3 class="timeline-step-title">Approve & Assign</h3>
+                    <h3 class="timeline-step-title">Approve &amp; Assign</h3>
                     <p class="timeline-step-text">Selected students are approved by the company and the admin (if required).</p>
                 </div>
                 <div class="timeline-connector">- - →</div>
+                <!-- Step 6: Internship done — student submits final report,
+                     company reviews it, and certificate gets generated. -->
                 <div class="timeline-step">
                     <div class="timeline-number">6</div>
                     <div class="timeline-step-icon">🏆</div>
-                    <h3 class="timeline-step-title">Complete & Certify</h3>
+                    <h3 class="timeline-step-title">Complete &amp; Certify</h3>
                     <p class="timeline-step-text">Students complete the internship, submit reports, and receive certificates.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ THREE ROLES, ONE PLATFORM ═══ -->
+    <!--
+        ================================================================
+        THREE ROLES, ONE PLATFORM
+        ================================================================
+        Three cards in a grid — one per user type — each listing out
+        what that user can actually do on the platform. Checklist format
+        works well here because people scan these sections quickly and
+        bullet points are the easiest thing to skim.
+
+        Color coding for the image/icon area:
+          blue       → students
+          red        → companies  (rockets/growth vibe)
+          green-soft → admins     (trust/authority vibe)
+
+        These are just modifier classes on .role-detail-image. The
+        actual color values live in style.css under that ruleset.
+        ================================================================
+    -->
     <section class="section section--gray">
         <div class="container text-center">
             <h2 class="section-title animate-on-scroll">Three Roles, One Platform</h2>
@@ -120,7 +246,11 @@
         </div>
         <div class="container">
             <div class="roles-grid stagger-children animate-on-scroll">
-                <!-- Students -->
+                <!--
+                    Student card — covers the full student journey:
+                    profile setup → apply → track status → submit report → get cert.
+                    These are the most common actions so they're listed first.
+                -->
                 <div class="role-detail-card">
                     <div class="role-detail-image blue">
                         👨‍💻
@@ -128,7 +258,7 @@
                     <div class="role-detail-body">
                         <h3 class="role-detail-title">For Students</h3>
                         <ul class="role-detail-list">
-                            <li><span class="check-icon">✅</span> Create profile & upload resume</li>
+                            <li><span class="check-icon">✅</span> Create profile &amp; upload resume</li>
                             <li><span class="check-icon">✅</span> Find and apply for internships</li>
                             <li><span class="check-icon">✅</span> Track application status</li>
                             <li><span class="check-icon">✅</span> Submit reports</li>
@@ -137,7 +267,12 @@
                     </div>
                 </div>
 
-                <!-- Companies -->
+                <!--
+                    Company card — the hiring side. Companies react to
+                    what students send in rather than initiating contact.
+                    The main unique action here is "Post internship" —
+                    that's the starting trigger for the whole flow.
+                -->
                 <div class="role-detail-card">
                     <div class="role-detail-image red">
                         🚀
@@ -154,7 +289,13 @@
                     </div>
                 </div>
 
-                <!-- Administrators -->
+                <!--
+                    Admin card — typically a college placement officer or
+                    department coordinator. They don't post internships
+                    themselves but they oversee everything: verifying
+                    companies, approving placements, pulling analytics.
+                    Think of them as the platform referee.
+                -->
                 <div class="role-detail-card">
                     <div class="role-detail-image green-soft">
                         🛡️
@@ -165,7 +306,7 @@
                             <li><span class="check-icon">✅</span> Manage users and companies</li>
                             <li><span class="check-icon">✅</span> Approve internships and reports</li>
                             <li><span class="check-icon">✅</span> Monitor activities</li>
-                            <li><span class="check-icon">✅</span> Generate reports & analytics</li>
+                            <li><span class="check-icon">✅</span> Generate reports &amp; analytics</li>
                             <li><span class="check-icon">✅</span> Ensure smooth process</li>
                         </ul>
                     </div>
@@ -174,7 +315,19 @@
         </div>
     </section>
 
-    <!-- ═══ CTA BANNER ═══ -->
+    <!--
+        ================================================================
+        CTA BANNER
+        ================================================================
+        Conversion nudge at the bottom of the page. By this point the
+        user has seen the full 6-step flow and the role breakdown, so
+        they have enough context to decide if they want in. Keep the
+        copy short — no need to repeat features again here.
+
+        Points straight to /register (not /login) because new visitors
+        are more likely to be signing up than returning to log in.
+        ================================================================
+    -->
     <section class="section">
         <div class="container">
             <div class="cta-banner animate-on-scroll">
@@ -190,20 +343,44 @@
         </div>
     </section>
 
-    <!-- ═══ FOOTER ═══ -->
+    <!--
+        ================================================================
+        FOOTER
+        ================================================================
+        Five-column grid on desktop (brand + 4 link columns), collapses
+        to a stacked layout on mobile via mobile.css.
+
+        Columns:
+          1. Brand blurb + social links
+          2. Quick Links   (sitewide nav)
+          3. For Students  (student dashboard pages)
+          4. For Companies (company dashboard pages)
+          5. Contact info  (address, email, phone)
+
+        TODO: social icon hrefs are all "/" right now as placeholders.
+        Replace with actual social profile URLs once those are set up.
+
+        TODO: the student/company column links also point to "/" for
+        now. They need to resolve to dashboard sub-routes once auth
+        and the dashboard pages are built out.
+        ================================================================
+    -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
+                <!-- Col 1: Brand identity + social icons -->
                 <div class="footer-brand">
                     <h3>🎓 Intern<span>Manage</span></h3>
                     <p>Empowering internships and helping students build successful careers.</p>
                     <div class="footer-social">
+                        <!-- placeholder hrefs — update these once social pages exist -->
                         <a href="/" aria-label="Facebook">f</a>
                         <a href="/" aria-label="Twitter">𝕏</a>
                         <a href="/" aria-label="LinkedIn">in</a>
                         <a href="/" aria-label="Instagram">📷</a>
                     </div>
                 </div>
+                <!-- Col 2: Main nav links — mirrors the top navbar -->
                 <div class="footer-col">
                     <h4>Quick Links</h4>
                     <a href="/">Home</a>
@@ -212,6 +389,8 @@
                     <a href="/how-it-works">How It Works</a>
                     <a href="/contact">Contact Us</a>
                 </div>
+                <!-- Col 3: Student-specific deep links (dashboard sub-pages).
+                     All point to "/" for now — need real routes later. -->
                 <div class="footer-col">
                     <h4>For Students</h4>
                     <a href="/">Browse Internships</a>
@@ -219,6 +398,8 @@
                     <a href="/">Submit Reports</a>
                     <a href="/">Certificates</a>
                 </div>
+                <!-- Col 4: Company-specific deep links — same situation,
+                     placeholders until dashboard is built. -->
                 <div class="footer-col">
                     <h4>For Companies</h4>
                     <a href="/">Post Internship</a>
@@ -226,6 +407,12 @@
                     <a href="/">Find Talent</a>
                     <a href="/">Dashboard</a>
                 </div>
+                <!--
+                    Col 5: Contact details.
+                    Address is Sigma University, Vadodara — that's where
+                    this project was built. Phone and email are still
+                    placeholder values, swap them out before going live.
+                -->
                 <div class="footer-col">
                     <h4>Contact Us</h4>
                     <div class="footer-contact-item">
@@ -242,16 +429,26 @@
                     </div>
                 </div>
             </div>
+            <!-- Bottom bar: copyright left, legal links right -->
             <div class="footer-bottom">
                 <span>© 2024 InternManage. All rights reserved.</span>
                 <div class="footer-bottom-links">
                     <a href="/privacy">Privacy Policy</a>
-                    <a href="/terms">Terms & Conditions</a>
+                    <a href="/terms">Terms &amp; Conditions</a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!--
+        app.js is a single shared script for all public pages. It wires
+        up: navbar scroll shadow, mobile hamburger menu, auth state
+        (read/write localStorage), scroll-triggered animations via
+        IntersectionObserver, counter animations, smooth anchor scroll,
+        password visibility toggles, and the three form handlers
+        (login, register, contact). One file keeps the request count
+        low — no per-page scripts needed.
+    -->
     <script src="/js/app.js"></script>
 </body>
 </html>
