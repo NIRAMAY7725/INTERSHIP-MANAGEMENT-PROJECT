@@ -60,3 +60,16 @@ td .actions { margin: 0; }
     nav { grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); }
     main { padding-top: 14px; }
 }
+
+.badge { white-space: nowrap; }
+@media (max-width: 720px) {
+    .table-wrap { border: 0; }
+    table, tbody, tr { display: block; }
+    thead { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+    tbody tr { margin-bottom: 10px; padding: 6px; border: 1px solid var(--border); border-radius: 10px; }
+    tbody td { display: grid; grid-template-columns: minmax(90px, 29%) minmax(0, 1fr); align-items: start; gap: 8px; }
+    tbody td::before { content: attr(data-label); font-weight: 650; }
+    tbody td:last-child { border-bottom: 0; }
+    tbody td:has(.actions:empty) { display: none; }
+    tbody td p { margin: 8px 0 0; }
+}

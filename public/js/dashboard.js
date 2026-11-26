@@ -134,7 +134,16 @@ function table(parent, columns, rows, renderRow) {
     const head = el("tr", undefined, el("thead", undefined, node));
     for (const column of columns) el("th", column, head).scope = "col";
     const body = el("tbody", undefined, node);
-    for (const item of rows) renderRow(el("tr", undefined, body), item);
+    for (const item of rows) {
+        const row = el("tr", undefined, body);
+        renderRow(row, item);
+        for (const cell of row.cells) {
+            cell.dataset.label = columns[cell.cellIndex];
+            const payload = el("div");
+            payload.append(...cell.childNodes);
+            cell.append(payload);
+        }
+    }
 }
 function cells(row, ...values) {
     values.forEach(value => el("td", value ?? "—", row));

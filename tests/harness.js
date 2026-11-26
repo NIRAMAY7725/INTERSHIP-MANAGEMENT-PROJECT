@@ -10,7 +10,27 @@ const listing = {
     stipend: 12000, duration: "12 weeks", description: "Build and test accessible features with our engineering team.",
     requirements: ["JavaScript fundamentals", "Interest in accessibility"], deadline: future(),
 };
-const pdf = Buffer.from("%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\n%%EOF\n");
+function sampleResume() {
+    const stream = "BT /F1 16 Tf 50 730 Td (Aarav Mehta - Sample Resume) Tj ET";
+    const objects = [
+        "<< /Type /Catalog /Pages 2 0 R >>",
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        "<< /Length " + stream.length + " >>\nstream\n" + stream + "\nendstream",
+    ];
+    let document = "%PDF-1.4\n";
+    const offsets = objects.map((body, index) => {
+        const offset = document.length;
+        document += (index + 1) + " 0 obj\n" + body + "\nendobj\n";
+        return String(offset).padStart(10, "0") + " 00000 n \n";
+    });
+    const xref = document.length;
+    document += "xref\n0 6\n0000000000 65535 f \n" + offsets.join("") +
+        "trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF\n";
+    return Buffer.from(document);
+}
+const pdf = sampleResume();
 
 async function harness() {
     const mongo = await MongoMemoryServer.create({ instance: { dbName: "internmanage_isolated_test" } });

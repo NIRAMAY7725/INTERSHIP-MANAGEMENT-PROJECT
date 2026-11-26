@@ -28,8 +28,15 @@ app.use(express.json({ limit: "64kb" }));
 app.use(express.static(publicDir));
 app.use("/api", require("./middleware/apiOptimize").apiOptimize);
 if (process.env.NODE_ENV !== "test") {
-    app.use("/api", rateLimit({ windowMs: 60000, limit: 180, message: { error: "Too many requests. Try again shortly." } }));
-    const authLimit = rateLimit({ windowMs: 900000, limit: 20, message: { error: "Too many attempts. Try again later." } });
+    const limitHeaders = { standardHeaders: "draft-8", legacyHeaders: false };
+    app.use("/api", rateLimit({
+        ...limitHeaders, windowMs: 60000, limit: 180,
+        message: { error: "Too many requests. Try again shortly." },
+    }));
+    const authLimit = rateLimit({
+        ...limitHeaders, windowMs: 900000, limit: 20,
+        message: { error: "Too many attempts. Try again later." },
+    });
     app.use(["/api/auth/login", "/api/auth/register", "/api/auth/password"], authLimit);
 }
 app.use("/api/users", require("./routes/userRoute"));

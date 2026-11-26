@@ -9,3 +9,5 @@
 - Added administrative account operations, listing moderation, contact archiving, audit logs and CSV export.
 - Corrected misleading public navigation and unsupported feature descriptions, removed fabricated public counters and made role selection keyboard accessible.
 - Added database administration commands, trusted account scripts, setup guidance, REST documentation and isolated verification workflows.
+- Updated vulnerable transitive and direct npm dependencies flagged by the audit.
+- Captured 37 real Chromium screenshots and verified mobile application tracking with stacked rows.
