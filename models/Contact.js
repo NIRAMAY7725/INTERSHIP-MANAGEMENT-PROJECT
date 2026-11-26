@@ -22,6 +22,7 @@ const contactSchema = new mongoose.Schema(
             required: [true, "Subject is required"],
             trim: true,
         },
+        archivedAt: Date,
         message: {
             type: String,
             required: [true, "Message is required"],

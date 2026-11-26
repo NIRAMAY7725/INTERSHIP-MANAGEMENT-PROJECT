@@ -1,34 +1,23 @@
 const Contact = require("../models/Contact");
+const Audit = require("../models/AuditLog");
+const { fields, list, found, id, fail } = require("../lib/request");
 
-// POST /api/contact
-const submitContact = async (req, res) => {
-    try {
-        const { name, email, subject, message } = req.body;
+async function submitContact(req, res) {
+    const values = fields(req.body, { name: "string", email: "string", subject: "string", message: "string" });
+    if (values.name?.length > 100 || values.email?.length > 254 || values.subject?.length > 150) fail(400, "Contact fields are too long");
+    await Contact.create(values);
+    res.status(201).json({ message: "Message sent successfully" });
+}
 
-        const contact = await Contact.create({
-            name,
-            email,
-            subject,
-            message,
-        });
+async function getAllContacts(req, res) {
+    res.json(await list(Contact, {}, req));
+}
 
-        res.status(201).json({
-            message: "Message sent successfully! We'll get back to you soon.",
-            contact,
-        });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
+async function archiveContact(req, res) {
+    const key = id(req.params.id);
+    found(await Contact.findByIdAndUpdate(key, { archivedAt: new Date() }));
+    await Audit.create({ actor: req.user.id, action: "Archived contact message", target: key });
+    res.json({ message: "Message archived" });
+}
 
-// GET /api/contact (admin only)
-const getAllContacts = async (req, res) => {
-    try {
-        const contacts = await Contact.find().sort({ createdAt: -1 });
-        res.json(contacts);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-module.exports = { submitContact, getAllContacts };
+module.exports = { submitContact, getAllContacts, archiveContact };
