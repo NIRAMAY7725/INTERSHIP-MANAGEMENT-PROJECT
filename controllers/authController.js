@@ -1,81 +1,54 @@
 const User = require("../models/User");
+const { fields, fail, validatePassword } = require("../lib/request");
 
-// POST /api/auth/register
-const register = async (req, res) => {
-    try {
-        const { name, email, password, role } = req.body;
-        if (![name, email, password].every(v => typeof v === "string")) return res.status(400).json({ error: "Invalid registration fields" });
-
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ error: "Email already registered" });
-        }
-
-        // Restrict roles to prevent privilege escalation
-        const assignedRole = role === "company" ? "company" : "user";
-
-        // Create user (password is hashed by pre-save hook)
-        const user = await User.create({
-            name,
-            email,
-            password,
-            role: assignedRole,
-        });
-
-        // Generate JWT
-        const token = user.generateAuthToken();
-
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            token,
-        });
-    } catch (error) {
-        console.error("Register Error:", error.message);
-        res.status(400).json({ error: error.name === 'ValidationError' ? error.message : "Registration failed. Please try again." });
+function credentials(body) {
+    const { email } = fields(body, { email: "string" });
+    const password = body.password;
+    if (!email || email.length > 254 || typeof password !== "string" || !password || Buffer.byteLength(password) > 72) {
+        fail(400, "Enter a valid email and password");
     }
-};
+    return { email: email.toLowerCase(), password };
+}
 
-// POST /api/auth/login
-const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+function session(user) {
+    return { _id: user.id, name: user.name, email: user.email, role: user.role, token: user.generateAuthToken() };
+}
 
-        if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
-            return res
-                .status(400)
-                .json({ error: "Please provide email and password" });
-        }
+async function register(req, res) {
+    const { email, password } = credentials(req.body);
+    const { name, role = "user" } = fields(req.body, { name: "string", role: "string" });
+    if (!["user", "company"].includes(role)) fail(400, "Choose a student or company account");
+    validatePassword(password);
+    const user = await User.create({ name, email, password, role });
+    res.status(201).json(session(user));
+}
 
-        // Find user and include password field
-        const user = await User.findOne({ email }).select("+password");
-        if (!user || !user.isActive) {
-            return res.status(401).json({ error: "Invalid email or password" });
-        }
+async function login(req, res) {
+    const { email, password } = credentials(req.body);
+    const user = await User.findOne({ email }).select("+password +sessionVersion");
+    if (!user?.isActive || !await user.matchPassword(password)) fail(401, "Invalid email or password");
+    res.json(session(user));
+}
 
-        // Check password
-        const isMatch = await user.matchPassword(password);
-        if (!isMatch) {
-            return res.status(401).json({ error: "Invalid email or password" });
-        }
+async function logout(req, res) {
+    await User.updateOne({ _id: req.user.id }, { $inc: { sessionVersion: 1 } });
+    res.json({ message: "Signed out" });
+}
 
-        // Generate JWT
-        const token = user.generateAuthToken();
+async function changePassword(req, res) {
+    fields(req.body, {});
+    const { currentPassword, password } = req.body;
+    validatePassword(password);
+    const user = await User.findById(req.user.id).select("+password +sessionVersion");
+    if (typeof currentPassword !== "string" || Buffer.byteLength(currentPassword) > 72 ||
+        !await user.matchPassword(currentPassword)) fail(400, "Current password is incorrect");
+    user.$where = user.isSelected("sessionVersion") && user.sessionVersion === 0
+        ? { $or: [{ sessionVersion: 0 }, { sessionVersion: { $exists: false } }] }
+        : { sessionVersion: user.sessionVersion };
+    user.password = password;
+    user.sessionVersion += 1;
+    await user.save();
+    res.json({ message: "Password changed. Sign in again." });
+}
 
-        res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            token,
-        });
-    } catch (error) {
-        console.error("Login Error:", error.message);
-        res.status(500).json({ error: "Internal Server Error. Please try again later." });
-    }
-};
-
-module.exports = { register, login };
+module.exports = { register, login, logout, changePassword };

@@ -1,144 +1,76 @@
 const express = require("express");
-const path = require("path");
-const os = require("os");
+const path = require("node:path");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const connectDB = require("./config/db");
-
-
-// Import routes
-const userRouter = require("./routes/userRoute");
-const authRouter = require("./routes/authRoute");
-const contactRouter = require("./routes/contactRoute");
-
 const app = express();
+const publicDir = path.join(__dirname, "public");
 
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                scriptSrc: ["'self'"],
-                imgSrc: ["'self'", "data:", "https:"],
-                styleSrc: ["'self'", "'unsafe-inline'", "https:"],
-                fontSrc: ["'self'", "https:", "data:"],
-                connectSrc: ["'self'", "https:"],
-                mediaSrc: ["'self'", "https:", "data:"],
-                objectSrc: ["'none'"],
-                frameSrc: ["'self'", "https:"],
-                upgradeInsecureRequests: [],
-            },
+app.disable("x-powered-by");
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            imgSrc: ["'self'", "data:", "https:"],
+            mediaSrc: ["'self'", "data:"],
+            upgradeInsecureRequests: process.env.NODE_ENV === "production" ? [] : null,
         },
-    })
-);
-
-// Middleware
+    },
+}));
 if (process.env.CORS_ORIGIN) app.use(cors({ origin: process.env.CORS_ORIGIN }));
-app.use(compression()); // gzip/brotli — ~70% smaller responses for mobile
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Rate limiting for auth routes
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Limit each IP to 10 requests per windowMs
-    message: { error: "Too many requests from this IP, please try again after 15 minutes" },
-});
-app.use("/api/auth", authLimiter);
-
-// Serve static files with long cache (1 year for hashed assets, 1 day for HTML)
-app.use(
-    express.static(path.join(__dirname, "public"), {
-        maxAge: "1d",
-        etag: true,
-        lastModified: true,
-    })
-);
-
-// API performance middleware (response timing + cache hints)
-const { apiOptimize } = require("./middleware/apiOptimize");
-app.use("/api", apiOptimize);
-
-// API Routes
-app.use("/api/users", userRouter);
-app.use("/api/auth", authRouter);
+app.use(compression());
+app.use(express.json({ limit: "64kb" }));
+app.use(express.static(publicDir));
+app.use("/api", require("./middleware/apiOptimize").apiOptimize);
+if (process.env.NODE_ENV !== "test") {
+    app.use("/api", rateLimit({ windowMs: 60000, limit: 180, message: { error: "Too many requests. Try again shortly." } }));
+    const authLimit = rateLimit({ windowMs: 900000, limit: 20, message: { error: "Too many attempts. Try again later." } });
+    app.use(["/api/auth/login", "/api/auth/register", "/api/auth/password"], authLimit);
+}
+app.use("/api/users", require("./routes/userRoute"));
+app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/dashboard", require("./routes/dashboardRoute"));
-app.get("/dashboard", (req, res) => res.sendFile(path.join(__dirname, "public", "dashboard.html")));
-app.use("/api/contact", rateLimit({ windowMs: 15 * 60 * 1000, max: 30 }), contactRouter);
+app.use("/api/contact", require("./routes/contactRoute"));
+app.use("/api", require("./routes/internmanage"));
+app.use("/api", (req, res) => res.status(404).json({ error: "API endpoint not found" }));
 
-// Serve frontend pages
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+for (const page of ["about", "features", "how-it-works", "contact", "login", "register", "privacy", "terms", "dashboard"]) {
+    app.get("/" + page, (req, res) => res.sendFile(path.join(publicDir, page + ".html")));
+}
+app.use((error, req, res, next) => {
+    if (res.headersSent) return next(error);
+    if (error.code === 11000) return res.status(409).json({ error: "This record already exists" });
+    if (error.name === "DocumentNotFoundError" || error.name === "VersionError") {
+        return res.status(409).json({ error: "The record changed. Refresh and try again." });
+    }
+    if (error.name === "ValidationError" || error.name === "CastError") {
+        return res.status(400).json({ error: "Check the submitted fields and try again" });
+    }
+    const status = error.code === "LIMIT_FILE_SIZE" ? 413 :
+        error.name === "MulterError" ? 400 : error.status || 500;
+    const messages = { 413: "The upload or request is too large", 500: "The server could not complete this request" };
+    if (status >= 500) console.error("Request failed", { method: req.method, name: error.name });
+    res.status(status).json({ error: messages[status] || (error.type ? "Invalid request body" : error.message) });
 });
 
-app.get("/about", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "about.html"));
-});
-
-app.get("/features", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "features.html"));
-});
-
-app.get("/how-it-works", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "how-it-works.html"));
-});
-
-app.get("/contact", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "contact.html"));
-});
-
-app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
-app.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "register.html"));
-});
-
-app.get("/privacy", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "privacy.html"));
-});
-
-app.get("/terms", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "terms.html"));
-});
-
-const PORT = Number(process.env.PORT || 5000);
-const HOST = "0.0.0.0";
-const LOCAL_URL = `http://localhost:${PORT}`;
-
-// Connect to DB first, then seed a test user, then start server
-const startServer = async () => {
-    if (!process.env.MONGO_URI || !process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
-        throw new Error("Set MONGO_URI and a JWT_SECRET of at least 32 characters");
+async function start() {
+    if (!process.env.MONGO_URI || Buffer.byteLength(process.env.JWT_SECRET || "") < 32) {
+        throw new Error("Missing server configuration");
     }
     await connectDB();
-
-    const server = app.listen(PORT, HOST, () => {
-        console.log(`🚀 Server running on ${LOCAL_URL}`);
-
-        // Log LAN URL for phone testing
-        const nets = os.networkInterfaces();
-        for (const name of Object.keys(nets)) {
-            for (const net of nets[name]) {
-                if (net.family === "IPv4" && !net.internal) {
-                    console.log(`📱 LAN access: http://${net.address}:${PORT}`);
-                }
-            }
-        }
+    return app.listen(Number(process.env.PORT || 5000), process.env.HOST || "0.0.0.0", () => {
+        console.log("InternManage is listening");
     });
+}
 
-    server.on("error", (error) => {
-        console.error(`❌ Server could not start on ${HOST}:${PORT}:`, error.message);
+if (require.main === module) {
+    start().catch(error => {
+        console.error("Startup failed. Check MONGO_URI, database connectivity, indexes and JWT_SECRET.", error.name);
         process.exit(1);
     });
-};
+}
 
-startServer().catch((error) => {
-    console.error("❌ Server startup failed:", error);
-    process.exit(1);
-});
+module.exports = { app, start };

@@ -43,6 +43,8 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
 
+    sessionVersion: { type: Number, default: 0, select: false },
+
     avatar: {
       type: String,
       default: "",
@@ -75,9 +77,9 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 // ─── Instance method: generate a signed JWT token ───────────────────
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
-    { id: this._id, role: this.role },
+    { id: this._id, version: this.sessionVersion ?? 0 },
     process.env.JWT_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: "8h", algorithm: "HS256", issuer: "internmanage" }
   );
 };
 

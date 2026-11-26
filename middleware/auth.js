@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { isObjectIdOrHexString } = require("mongoose");
 const User = require("../models/User");
 
 const protect = async (req, res, next) => {
@@ -6,13 +7,14 @@ const protect = async (req, res, next) => {
     if (!match) return res.status(401).json({ error: "Authentication required" });
     let decoded;
     try {
-        decoded = jwt.verify(match[1], process.env.JWT_SECRET, { algorithms: ["HS256"] });
+        decoded = jwt.verify(match[1], process.env.JWT_SECRET, { algorithms: ["HS256"], issuer: "internmanage" });
     } catch {
         return res.status(401).json({ error: "Invalid or expired token" });
     }
     try {
-        const user = await User.findById(decoded.id);
-        if (!user || !user.isActive) return res.status(401).json({ error: "Account unavailable" });
+        if (!isObjectIdOrHexString(decoded.id)) return res.status(401).json({ error: "Invalid session" });
+        const user = await User.findById(decoded.id).select("+sessionVersion");
+        if (!user || !user.isActive || decoded.version !== user.sessionVersion) return res.status(401).json({ error: "Account unavailable" });
         req.user = user;
         return next();
     } catch (error) {
