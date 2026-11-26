@@ -45,7 +45,7 @@ const Auth = {
         const user = localStorage.getItem('internmanage_user');
         // JSON.parse can throw if the stored value somehow got corrupted,
         // but in practice localStorage always returns what we put in.
-        return user ? JSON.parse(user) : null;
+        try { return user ? JSON.parse(user) : null; } catch { return null; }
     },
 
     /*
@@ -110,7 +110,9 @@ function showToast(message, type = 'success') {
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;
+    const icon = document.createElement('span');
+    icon.textContent = icons[type] || '';
+    toast.append(icon, document.createTextNode(` ${message}`));
 
     container.appendChild(toast);
 
