@@ -16,6 +16,8 @@ app.use(helmet({
         directives: {
             imgSrc: ["'self'", "data:", "https:"],
             mediaSrc: ["'self'", "data:"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
             upgradeInsecureRequests: process.env.NODE_ENV === "production" ? [] : null,
         },
     },

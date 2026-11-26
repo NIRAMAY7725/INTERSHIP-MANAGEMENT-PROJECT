@@ -1,3 +1,31 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>InternManage | Dashboard</title><link rel="stylesheet" href="/css/dashboard.css"><script src="/js/dashboard.js" defer></script></head>
-<body><aside><a class="brand" href="/">InternManage</a><p id="role">Dashboard</p><nav><button data-view="overview">Overview</button><button data-view="profile">My profile</button><button data-view="users" hidden>Manage users</button><button data-view="contacts" hidden>Contact messages</button><a href="/">Home</a><button id="logout">Sign out</button></nav></aside><main><header><div><small>INTERNSHIP MANAGEMENT PORTAL</small><h1 id="heading">Dashboard</h1></div><span id="identity"></span></header><p id="notice" role="status" aria-live="polite">Loading account...</p><section id="content" hidden></section></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>InternManage | Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/dashboard.js" defer></script>
+</head>
+<body>
+    <aside>
+        <a class="brand" href="/">Intern<span>Manage</span></a>
+        <p id="role"></p>
+        <nav id="nav" aria-label="Dashboard"></nav>
+    </aside>
+    <main>
+        <header>
+            <button type="button" id="menu" aria-controls="nav" aria-expanded="true">Menu</button>
+            <details id="account">
+                <summary id="identity">Account</summary>
+                <button type="button" id="profile">My profile</button>
+                <button type="button" id="password">Change password</button>
+                <button type="button" id="logout">Sign out</button>
+            </details>
+        </header>
+        <h1 id="heading" tabindex="-1">Dashboard</h1>
+        <p id="notice" role="status" aria-live="polite">Loading account…</p>
+        <section id="content" aria-labelledby="heading"></section>
+    </main>
+</body>
+</html>

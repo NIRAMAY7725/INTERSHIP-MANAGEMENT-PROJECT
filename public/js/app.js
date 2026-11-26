@@ -63,7 +63,16 @@ const Auth = {
         }));
     },
 
-    logout() {
+    async logout() {
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST', headers: { Authorization: 'Bearer ' + this.getToken() }
+            });
+            if (!response.ok && response.status !== 401) throw new Error('Sign out failed. Try again.');
+        } catch (error) {
+            showToast(error.message, 'error');
+            return;
+        }
         localStorage.removeItem('internmanage_token');
         localStorage.removeItem('internmanage_user');
         updateAuthUI();              // flip navbar back to guest state immediately
@@ -463,7 +472,7 @@ function initLoginForm() {
  *
  * Client-side validation done before hitting the API:
  *   - Passwords must match
- *   - Password must be ≥6 chars (mirrors the backend validator so
+ *   - Password must be at least 8 characters (mirrors the backend validator so
  *     we can give instant feedback without a round-trip)
  *
  * On success we redirect to /login (not /). The user needs to log in
@@ -507,8 +516,8 @@ function initRegisterForm() {
             submitBtn.disabled  = false;
             return;
         }
-        if (password.length < 6) {
-            showToast('Password must be at least 6 characters', 'error');
+        if (password.length < 8 || new TextEncoder().encode(password).length > 72) {
+            showToast('Use at least 8 characters and at most 72 UTF-8 bytes', 'error');
             submitBtn.innerHTML = originalText;
             submitBtn.disabled  = false;
             return;
