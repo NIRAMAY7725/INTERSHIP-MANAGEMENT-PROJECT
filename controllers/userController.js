@@ -44,9 +44,11 @@ const getUserById = async (req, res) => {
 // POST create user
 const createUser = async (req, res) => {
     try {
-        const user = new User(req.body);
+        const { name, email, password, role, age, avatar, isActive } = req.body;
+        const user = new User({ name, email, password, role, age, avatar, isActive });
         await user.save();
-        res.status(201).json(user);
+        const { password: omitted, ...safeUser } = user.toObject();
+        res.status(201).json(safeUser);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -56,9 +58,12 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Filter out sensitive fields to prevent mass assignment
-        const { password, role, email, _id, ...safeUpdateData } = req.body;
+        const safeUpdateData = {};
+        for (const key of ["name", "age", "avatar", "isActive"]) {
+            if (Object.hasOwn(req.body, key)) safeUpdateData[key] = req.body[key];
+        }
 
-        const user = await User.findByIdAndUpdate(req.params.id, safeUpdateData, { new: true });
+        const user = await User.findByIdAndUpdate(req.params.id, safeUpdateData, { new: true, runValidators: true });
         if (!user) return res.status(404).json({ error: "User not found" });
         res.json(user);
     } catch (error) {
