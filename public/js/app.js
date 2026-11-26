@@ -160,6 +160,9 @@ function updateAuthUI() {
         // Show first letter of name as avatar (e.g. "Niramay" → "N")
         if (avatar && user) avatar.textContent = user.name.charAt(0).toUpperCase();
         if (name   && user) name.textContent   = user.name;
+        if (!userSection.querySelector('.dashboard-link')) {
+            const link = document.createElement('a'); link.href = '/dashboard'; link.textContent = 'Dashboard'; link.className = 'btn btn-outline btn-sm dashboard-link'; userSection.prepend(link);
+        }
     } else {
         authButtons.classList.remove('hide');
         userSection.classList.remove('show');
@@ -440,7 +443,7 @@ function initLoginForm() {
             showToast(`Welcome back, ${result.name}!`, 'success');
 
             // Short delay so user sees the success toast before redirect
-            setTimeout(() => { window.location.href = '/'; }, 1000);
+            setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
         } catch (err) {
             showToast(err.message, 'error');
         } finally {
