@@ -4,6 +4,7 @@ const User = require("../models/User");
 const register = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
+        if (![name, email, password].every(v => typeof v === "string")) return res.status(400).json({ error: "Invalid registration fields" });
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -43,7 +44,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
             return res
                 .status(400)
                 .json({ error: "Please provide email and password" });
@@ -51,7 +52,7 @@ const login = async (req, res) => {
 
         // Find user and include password field
         const user = await User.findOne({ email }).select("+password");
-        if (!user) {
+        if (!user || !user.isActive) {
             return res.status(401).json({ error: "Invalid email or password" });
         }
 
