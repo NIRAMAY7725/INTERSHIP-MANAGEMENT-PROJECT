@@ -47,7 +47,7 @@ The navigation currently links to a few pages that are still in progress:
 - [ ] Student/company **dashboard**
 - [ ] **Certificates** for completed internships
 - [ ] **Reports/analytics** for admins and companies
-- [ ] Privacy Policy & Terms pages
+- [x] Privacy Policy & Terms pages
 
 If you're picking this project back up, this list is the priority order — the auth/security foundation is solid, so the fastest path to a working demo is the `Internship` + `Application` models next.
 
@@ -119,7 +119,7 @@ Create a `.env` file in the project root:
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_long_random_secret_string
+JWT_SECRET=your_random_secret_at_least_32_characters
 ```
 
 ### Run the server
@@ -128,20 +128,13 @@ JWT_SECRET=your_long_random_secret_string
 node server.js
 ```
 
-> There's no `npm start` script defined yet in `package.json` — running `node server.js` directly works today. Adding a `"start": "node server.js"` script is a quick, worthwhile improvement.
+Run `npm start` or `npm run dev` for watch mode.
 
 The app will be available at `http://localhost:5000`.
 
-### First-run seeding
+### First-run setup
 
-On first run against an empty database, the server automatically seeds one test user:
-
-```
-email: niramay@gmail.com
-password: niramay123
-```
-
-⚠️ **This is for local development only.** Remove or change this seed before deploying anywhere public, since it creates a predictable account with a known password.
+No default account is created. Register a student or company through the UI. Provision administrators separately using a trusted database administration process.
 
 ---
 
@@ -181,7 +174,7 @@ Both return `{ _id, name, email, role, token }` on success. `role` on registrati
 - JWTs carry `id` and `role`, expire after 7 days
 - Auth endpoints are rate-limited to reduce brute-force risk
 - User updates strip `password`, `role`, `email`, and `_id` server-side to prevent privilege escalation via the update endpoint
-- Before production: restrict `cors()` to your actual frontend origin (currently open to all origins) and confirm `JWT_SECRET` is a long, random value stored only in `.env`
+- Before production: set `CORS_ORIGIN` only if a separate frontend origin is required and confirm `JWT_SECRET` is a long, random value stored only in `.env`
 
 ---
 
