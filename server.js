@@ -66,6 +66,8 @@ app.use("/api", apiOptimize);
 // API Routes
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/dashboard", require("./routes/dashboardRoute"));
+app.get("/dashboard", (req, res) => res.sendFile(path.join(__dirname, "public", "dashboard.html")));
 app.use("/api/contact", rateLimit({ windowMs: 15 * 60 * 1000, max: 30 }), contactRouter);
 
 // Serve frontend pages
