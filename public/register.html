@@ -60,14 +60,14 @@
                 <div class="auth-card-form-group">
                     <label class="form-label">I am a...</label>
                     <div class="role-selector">
-                        <div class="role-option selected" data-role="user">
-                            <div class="role-option-icon">👨‍🎓</div>
-                            <div class="role-option-label">Student</div>
-                        </div>
-                        <div class="role-option" data-role="company">
-                            <div class="role-option-icon">🏢</div>
-                            <div class="role-option-label">Company</div>
-                        </div>
+                        <button type="button" class="role-option selected" data-role="user" aria-pressed="true">
+                            <span class="role-option-icon" aria-hidden="true">👨‍🎓</span>
+                            <span class="role-option-label">Student</span>
+                        </button>
+                        <button type="button" class="role-option" data-role="company" aria-pressed="false">
+                            <span class="role-option-icon" aria-hidden="true">🏢</span>
+                            <span class="role-option-label">Company</span>
+                        </button>
                     </div>
                 </div>
 

@@ -235,8 +235,9 @@ async function details(parent, key) {
     const row = actions(box);
     link(row, "All internships", "internships");
     if (me.role === "user") {
-        button(row, "Save internship", () => refresh("/saved/" + key, "PUT"));
-        button(row, "Apply", () => {
+        button(row, item.saved ? "Remove from saved" : "Save internship", () => refresh("/saved/" + key, item.saved ? "DELETE" : "PUT"));
+        if (item.applicationStatus) link(row, "Track application (" + item.applicationStatus + ")", "applications", key);
+        else button(row, "Apply", () => {
             if (confirm("Submit your application for " + item.title + "?")) return refresh("/internships/" + key + "/applications", "POST", undefined, "Application submitted");
         });
     } else if (me.role === "company") {
@@ -287,7 +288,7 @@ async function saved(parent) {
     table(parent, ["Internship", "Deadline", "Action"], data.items, (row, item) => {
         const ticket = item.internship;
         const cell = el("td", undefined, row);
-        if (ticket?.status === "open" && Date.parse(ticket.deadline) > Date.now()) link(cell, ticket.title, "details", ticket._id);
+        if (ticket && item.available) link(cell, ticket.title, "details", ticket._id);
         else cell.textContent = ticket?.title || "Unavailable internship";
         cells(row, date(ticket?.deadline));
         if (ticket) button(el("td", undefined, row), "Remove from saved", () => refresh("/saved/" + ticket._id, "DELETE"));
@@ -452,8 +453,21 @@ async function render(success) {
 document.getElementById("menu").addEventListener("click", event => {
     event.target.setAttribute("aria-expanded", String(!document.body.classList.toggle("collapsed")));
 });
+const identity = document.getElementById("identity");
+const accountMenu = document.getElementById("account");
+function toggleAccount(open) {
+    accountMenu.hidden = !open;
+    identity.setAttribute("aria-expanded", String(open));
+}
+identity.addEventListener("click", () => toggleAccount(accountMenu.hidden));
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !accountMenu.hidden) {
+        toggleAccount(false);
+        identity.focus();
+    }
+});
 for (const view of ["profile", "password"]) document.getElementById(view).addEventListener("click", () => {
-    document.getElementById("account").open = false;
+    toggleAccount(false);
     location.hash = view;
 });
 document.getElementById("logout").addEventListener("click", event => run(event.currentTarget, async () => {
@@ -465,7 +479,10 @@ window.addEventListener("hashchange", () => {
     heading.focus();
 });
 (async () => {
-    if (!token) return clearSession();
+    if (!token) {
+        sessionStorage.setItem("internmanage_view", location.hash);
+        return clearSession();
+    }
     try {
         me = await api("/dashboard/me");
         document.getElementById("role").textContent = labels[me.role] + " panel";

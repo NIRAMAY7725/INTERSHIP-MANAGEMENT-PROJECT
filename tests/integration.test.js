@@ -1,5 +1,8 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
+const { spawn } = require("node:child_process");
+const { once } = require("node:events");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { harness, password, listing, pdf, future } = require("./harness");
 const User = require("../models/User");
@@ -145,4 +148,31 @@ test("role workflows against isolated MongoDB", async t => {
         assert.equal((await request("/auth/logout", { token, method: "POST" })).status, 200);
         assert.equal((await request("/dashboard/me", { token })).status, 401);
     });
+
+    await t.test("legacy account compatibility and trusted operator scripts", async () => {
+        const email = "legacy@example.test";
+        const hash = await bcrypt.hash(password, 10);
+        await User.collection.insertOne({ name: "Legacy Account", email, role: "user", isActive: true, password: hash });
+        const original = (await login(email)).data;
+        assert.equal((await request("/dashboard/me", { token: original.token })).status, 200);
+
+        async function operator(action, input) {
+            const process = spawn("node", ["scripts/account.js", action, email], { stdio: ["pipe", "ignore", "pipe"] });
+            let errors = "";
+            process.stderr.on("data", chunk => { errors += chunk; });
+            process.stdin.end(input);
+            assert.equal((await once(process, "close"))[0], 0, errors);
+        }
+        await operator("admin");
+        assert.equal((await request("/dashboard/me", { token: original.token })).status, 401);
+        const promoted = (await login(email)).data;
+        assert.equal(promoted.role, "admin");
+        await operator("password", "Operator-reset-pass-42\n");
+        assert.equal((await request("/dashboard/me", { token: promoted.token })).status, 401);
+        const updated = await request("/auth/login", { method: "POST", body: { email, password: "Operator-reset-pass-42" } });
+        assert.equal(updated.status, 200);
+        assert.equal(updated.data.role, "admin");
+        assert.equal(updated.data.password, undefined);
+    });
+
 });

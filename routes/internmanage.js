@@ -18,6 +18,23 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 *
 
 router.use(protect);
 
+const listingWrites = new Map();
+
+// Serialize listing writes and submissions within the application process.
+async function withListingWrite(key, work) {
+    const previous = listingWrites.get(key);
+    let release;
+    const current = new Promise(resolve => { release = resolve; });
+    listingWrites.set(key, current);
+    try {
+        await previous;
+        return await work();
+    } finally {
+        release();
+        if (listingWrites.get(key) === current) listingWrites.delete(key);
+    }
+}
+
 async function updateProfile(model, user, values) {
     try {
         return await model.findOneAndUpdate({ user }, { $set: values }, { upsert: true, returnDocument: "after", runValidators: true });
@@ -104,7 +121,18 @@ router.get("/internships", async (req, res) => {
     res.json(await list(Internship, filter, req, listingQuery));
 });
 router.get("/internships/:id", async (req, res) => {
-    res.json(found(await listingQuery(Internship.findOne({ ...await visibleInternships(req.user), _id: id(req.params.id) }))));
+    const key = id(req.params.id);
+    const item = found(await listingQuery(Internship.findOne({ ...await visibleInternships(req.user), _id: key })).lean());
+    if (req.user.role === "user") {
+        const scope = { internship: key, student: req.user.id };
+        const [application, bookmark] = await Promise.all([
+            Application.findOne(scope).select("status").lean(),
+            Saved.exists(scope),
+        ]);
+        item.applicationStatus = application?.status ?? null;
+        item.saved = Boolean(bookmark);
+    }
+    res.json(item);
 });
 router.post("/internships", company, async (req, res) => {
     await requireApproved(req.user.id);
@@ -116,25 +144,34 @@ router.patch("/internships/:id", company, async (req, res) => {
     const { status } = fields(req.body, { status: "string" });
     if (status !== undefined && status !== "closed") fail(400, "Use closed to close a listing");
     if (status) values.status = status;
-    res.json(found(await Internship.findOneAndUpdate(
-        { _id: id(req.params.id), company: req.user.id, status: "open" }, values, { returnDocument: "after", runValidators: true }
-    )));
+    const key = id(req.params.id);
+    const updated = await withListingWrite(key, () => Internship.findOneAndUpdate(
+        { _id: key, company: req.user.id, status: "open" }, values, { returnDocument: "after", runValidators: true }
+    ));
+    res.json(found(updated));
 });
 router.delete("/internships/:id", authorize("company", "admin"), async (req, res) => {
     const key = id(req.params.id);
     const filter = { _id: key, status: { $ne: "removed" } };
-    if (req.user.role === "company") {
-        filter.company = req.user.id;
-        found(await Internship.exists(filter));
-        if (await Application.exists({ internship: key })) fail(409, "Listings with applications can be closed");
-    }
-    found(await Internship.findOneAndUpdate(filter, { status: "removed" }));
+    await withListingWrite(key, async () => {
+        if (req.user.role === "company") {
+            filter.company = req.user.id;
+            found(await Internship.exists(filter));
+            if (await Application.exists({ internship: key })) fail(409, "Listings with applications can be closed");
+        }
+        found(await Internship.findOneAndUpdate(filter, { status: "removed" }));
+    });
     if (req.user.role === "admin") await Audit.create({ actor: req.user.id, target: key, action: "Removed internship" });
     res.json({ message: "Listing removed" });
 });
 
 router.get("/saved", student, async (req, res) => {
-    res.json(await list(Saved, { student: req.user.id }, req, query => query.populate("internship", "title status deadline")));
+    const result = await list(Saved, { student: req.user.id }, req, query => query.populate("internship", "title status deadline company"));
+    const visible = await Internship.find({ ...await visibleInternships(req.user), _id: { $in: result.items.map(item => item.internship?._id).filter(Boolean) } })
+        .select("_id").lean();
+    const available = new Set(visible.map(item => String(item._id)));
+    for (const item of result.items) item.available = available.has(String(item.internship?._id));
+    res.json(result);
 });
 router.put("/saved/:id", student, async (req, res) => {
     const key = id(req.params.id);
@@ -163,8 +200,11 @@ router.get("/applications", async (req, res) => {
         .populate("student", "name")));
 });
 router.post("/internships/:id/applications", student, async (req, res) => {
-    const internship = found(await Internship.findOne({ ...await visibleInternships(req.user), _id: id(req.params.id) }));
-    const application = await Application.create({ internship: internship.id, student: req.user.id, company: internship.company });
+    const key = id(req.params.id);
+    const application = await withListingWrite(key, async () => {
+        const internship = found(await Internship.findOne({ ...await visibleInternships(req.user), _id: key }));
+        return Application.create({ internship: internship.id, student: req.user.id, company: internship.company });
+    });
     res.status(201).json(application);
 });
 router.get("/applications/:id/applicant", company, async (req, res) => {

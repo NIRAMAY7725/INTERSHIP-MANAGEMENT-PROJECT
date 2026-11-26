@@ -16,12 +16,14 @@
     <main>
         <header>
             <button type="button" id="menu" aria-controls="nav" aria-expanded="true">Menu</button>
-            <details id="account">
-                <summary id="identity">Account</summary>
-                <button type="button" id="profile">My profile</button>
-                <button type="button" id="password">Change password</button>
-                <button type="button" id="logout">Sign out</button>
-            </details>
+            <div class="account">
+                <button type="button" id="identity" aria-controls="account" aria-expanded="false">Account</button>
+                <div id="account" hidden>
+                    <button type="button" id="profile">My profile</button>
+                    <button type="button" id="password">Change password</button>
+                    <button type="button" id="logout">Sign out</button>
+                </div>
+            </div>
         </header>
         <h1 id="heading" tabindex="-1">Dashboard</h1>
         <p id="notice" role="status" aria-live="polite">Loading account…</p>

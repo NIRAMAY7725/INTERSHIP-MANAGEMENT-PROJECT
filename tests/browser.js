@@ -67,9 +67,19 @@ async function main() {
         await page.locator("#registerEmail").fill("aarav@example.test");
         await page.locator("#registerPassword").fill(env.password);
         await page.locator("#registerConfirmPassword").fill(env.password);
+        await page.locator("#registerForm input[type=checkbox]").check();
         await page.locator("#registerForm button[type=submit]").click();
         await page.waitForURL("**/login");
-        const company = await env.register("Juniper Studio", "juniper@example.test", "company");
+        await visit("/register");
+        await page.getByRole("button", { name: "Company", exact: true }).click();
+        await page.locator("#registerName").fill("Juniper Studio");
+        await page.locator("#registerEmail").fill("juniper@example.test");
+        await page.locator("#registerPassword").fill(env.password);
+        await page.locator("#registerConfirmPassword").fill(env.password);
+        await page.locator("#registerForm input[type=checkbox]").check();
+        await page.locator("#registerForm button[type=submit]").click();
+        await page.waitForURL("**/login");
+        const company = { email: "juniper@example.test" };
 
         await login(env.admin.email, "Admin dashboard");
         await nav("Manage companies");

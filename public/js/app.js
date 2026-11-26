@@ -452,7 +452,9 @@ function initLoginForm() {
             showToast(`Welcome back, ${result.name}!`, 'success');
 
             // Short delay so user sees the success toast before redirect
-            setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+            const destination = sessionStorage.getItem('internmanage_view') || '';
+            sessionStorage.removeItem('internmanage_view');
+            window.location.assign('/dashboard' + destination);
         } catch (err) {
             showToast(err.message, 'error');
         } finally {
@@ -492,8 +494,10 @@ function initRegisterForm() {
     const roleOptions = form.querySelectorAll('.role-option');
     roleOptions.forEach(option => {
         option.addEventListener('click', () => {
-            roleOptions.forEach(o => o.classList.remove('selected'));
-            option.classList.add('selected');
+            roleOptions.forEach(item => {
+                item.classList.toggle('selected', item === option);
+                item.setAttribute('aria-pressed', String(item === option));
+            });
             selectedRole = option.dataset.role;
         });
     });
@@ -605,58 +609,6 @@ function initSmoothScroll() {
 }
 
 /*
- * animateCounters()
- *
- * Counts up any element with a `data-count` attribute when it enters
- * the viewport. Optionally reads `data-suffix` for units like "+" or "k".
- *
- * Example markup:
- *   <span data-count="500" data-suffix="+">500+</span>
- *
- * Algorithm:
- *   step  = ceil(target / 60) — roughly 60 increments to reach the target
- *   timer = setInterval every 20ms → ~60fps, total duration ~1.2s
- *
- *   When `current` overshoots `target` we clamp it and clear the timer.
- *   This handles cases where step doesn't divide evenly into target.
- *
- * threshold: 0.5 means the element needs to be half-visible before
- * the counter starts — looks better than firing at the first pixel.
- */
-function animateCounters() {
-    const counters = document.querySelectorAll('[data-count]');
-    if (counters.length === 0) return;
-
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-
-                const el     = entry.target;
-                const target = parseInt(el.dataset.count);
-                const suffix = el.dataset.suffix || '';
-                let current  = 0;
-                const step   = Math.ceil(target / 60); // ~60 steps to complete
-
-                const timer = setInterval(() => {
-                    current += step;
-                    if (current >= target) {
-                        current = target;       // clamp — step might overshoot
-                        clearInterval(timer);
-                    }
-                    el.textContent = current + suffix;
-                }, 20); // 20ms ≈ 60fps
-
-                observer.unobserve(el); // run only once
-            });
-        },
-        { threshold: 0.5 }
-    );
-
-    counters.forEach(el => observer.observe(el));
-}
-
-/*
  * DOMContentLoaded bootstrap — runs once, in order.
  *
  * Global inits come first (navbar, auth, animations) so the page
@@ -673,7 +625,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initSmoothScroll();
     updateAuthUI();
-    animateCounters();
     initPasswordToggles();
 
     // Page-specific — safe to call everywhere, each guards with an early return

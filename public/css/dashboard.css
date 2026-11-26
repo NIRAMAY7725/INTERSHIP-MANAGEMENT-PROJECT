@@ -20,9 +20,10 @@ body.collapsed { grid-template-columns: minmax(0, 1fr); }
 body.collapsed aside { display: none; }
 main { width: 100%; max-width: 1450px; margin: auto; align-self: start; margin-top: 0; padding: 24px clamp(16px, 4vw, 56px) 50px; }
 header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
-details { position: relative; text-align: right; }
-summary { cursor: pointer; padding: 8px; font-weight: 650; }
-details button { display: block; margin: 4px 0 4px auto; }
+.account { position: relative; text-align: right; }
+#identity { font-weight: 650; }
+#account { position: absolute; z-index: 1; min-width: 165px; right: 0; top: calc(100% + 5px); padding: 6px; border: 1px solid var(--border); border-radius: 8px; background: white; box-shadow: 0 6px 20px #18233f22; }
+#account button { display: block; width: 100%; margin: 4px 0; }
 h1 { margin: 22px 0; font-size: clamp(1.9rem, 4vw, 2.6rem); letter-spacing: -.045em; }
 h2 { margin: 0 0 8px; font-size: 1.15rem; }
 p { overflow-wrap: anywhere; white-space: pre-line; }

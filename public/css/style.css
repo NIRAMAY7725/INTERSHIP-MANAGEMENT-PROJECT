@@ -1637,17 +1637,20 @@ textarea.form-input {
 }
 
 .role-option-icon {
+    display: block;
     font-size: 1.5rem;
     margin-bottom: 6px;
 }
 
 .role-option-label {
+    display: block;
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--gray-700);
 }
 
 .role-option.selected .role-option-label {
+    display: block;
     color: var(--primary);
 }
 
@@ -2887,4 +2890,15 @@ textarea.form-input {
     width: 150px;
     height: 150px;
     border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll,
+    .stagger-children > * {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .float-animation { animation: none; }
 }

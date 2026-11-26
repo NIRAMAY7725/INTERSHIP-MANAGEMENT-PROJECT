@@ -215,7 +215,7 @@
                     <div class="timeline-number">6</div>
                     <div class="timeline-step-icon">🏆</div>
                     <h3 class="timeline-step-title">Complete &amp; Certify</h3>
-                    <p class="timeline-step-text">Students complete the internship, submit reports, and receive certificates.</p>
+                    <p class="timeline-step-text">Companies mark accepted internships complete and students see the completion date.</p>
                 </div>
             </div>
         </div>
@@ -261,8 +261,8 @@
                             <li><span class="check-icon">✅</span> Create profile &amp; upload resume</li>
                             <li><span class="check-icon">✅</span> Find and apply for internships</li>
                             <li><span class="check-icon">✅</span> Track application status</li>
-                            <li><span class="check-icon">✅</span> Submit reports</li>
-                            <li><span class="check-icon">✅</span> Download certificates</li>
+                            <li><span class="check-icon">✅</span> Upload a PDF resume</li>
+                            <li><span class="check-icon">✅</span> View completion details</li>
                         </ul>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
                             <li><span class="check-icon">✅</span> Review and manage applications</li>
                             <li><span class="check-icon">✅</span> Shortlist and select candidates</li>
                             <li><span class="check-icon">✅</span> Monitor intern progress</li>
-                            <li><span class="check-icon">✅</span> Issue completion certificates</li>
+                            <li><span class="check-icon">✅</span> Mark internships completed</li>
                         </ul>
                     </div>
                 </div>
@@ -304,7 +304,7 @@
                         <h3 class="role-detail-title">For Administrators</h3>
                         <ul class="role-detail-list">
                             <li><span class="check-icon">✅</span> Manage users and companies</li>
-                            <li><span class="check-icon">✅</span> Approve internships and reports</li>
+                            <li><span class="check-icon">✅</span> Verify companies and moderate listings</li>
                             <li><span class="check-icon">✅</span> Monitor activities</li>
                             <li><span class="check-icon">✅</span> Generate reports &amp; analytics</li>
                             <li><span class="check-icon">✅</span> Ensure smooth process</li>
@@ -374,10 +374,6 @@
                     <p>Empowering internships and helping students build successful careers.</p>
                     <div class="footer-social">
                         <!-- placeholder hrefs — update these once social pages exist -->
-                        <a href="/" aria-label="Facebook">f</a>
-                        <a href="/" aria-label="Twitter">𝕏</a>
-                        <a href="/" aria-label="LinkedIn">in</a>
-                        <a href="/" aria-label="Instagram">📷</a>
                     </div>
                 </div>
                 <!-- Col 2: Main nav links — mirrors the top navbar -->
@@ -393,19 +389,17 @@
                      All point to "/" for now — need real routes later. -->
                 <div class="footer-col">
                     <h4>For Students</h4>
-                    <a href="/">Browse Internships</a>
-                    <a href="/">Track Applications</a>
-                    <a href="/">Submit Reports</a>
-                    <a href="/">Certificates</a>
+                    <a href="/dashboard#internships">Browse Internships</a>
+                    <a href="/dashboard#applications">Track Applications</a>
                 </div>
                 <!-- Col 4: Company-specific deep links — same situation,
                      placeholders until dashboard is built. -->
                 <div class="footer-col">
                     <h4>For Companies</h4>
-                    <a href="/">Post Internship</a>
-                    <a href="/">Manage Applications</a>
-                    <a href="/">Find Talent</a>
-                    <a href="/">Dashboard</a>
+                    <a href="/dashboard#create">Post Internship</a>
+                    <a href="/dashboard#applications">Manage Applications</a>
+                    <a href="/dashboard#applications">Find Talent</a>
+                    <a href="/dashboard#overview">Dashboard</a>
                 </div>
                 <!--
                     Col 5: Contact details.

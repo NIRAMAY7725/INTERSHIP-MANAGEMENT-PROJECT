@@ -1,210 +1,96 @@
-https://github.com/NIRAMAY7725/INTERSHIP-MANAGEMENT-PROJECT/issues/2#issue-5440221236
+# InternManage
 
+InternManage is a BCA minor project for managing internships from discovery through completion. It serves a public website and three role-based dashboards backed by MongoDB.
 
-# InternManage — Online Internship Management Portal
+| Role | Workflow |
+| --- | --- |
+| Student | Register, build a profile, upload a PDF resume, find and save internships, apply, track decisions and interviews, and view completion details. |
+| Company | Register, complete the company profile, obtain verification, publish and manage listings, review applicants, schedule interviews, and record decisions and completion. |
+| Admin | Verify companies, manage accounts, moderate listings, monitor applications, archive contact messages, review activity, and export reports. |
 
-> Empowering Internships, Building Careers
+The frontend uses HTML, CSS and vanilla JavaScript. Express runs on Node.js. Mongoose connects to MongoDB. Authentication uses bcrypt and signed JWTs.
 
-A one-stop platform for students, companies, and institutions to manage the internship lifecycle — from posting opportunities to applying, tracking, and approving them. Built with Node.js, Express, and MongoDB.
+## Run locally
 
----
-
-## 📌 Project Status
-
-This project is under **active development**. Authentication, role-based access control, and the admin/user backbone are complete and working. Core internship features (listings, applications, dashboards) are on the roadmap below.
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Runtime | Node.js |
-| Framework | Express.js 5 |
-| Database | MongoDB + Mongoose |
-| Authentication | JWT (JSON Web Tokens) |
-| Password Hashing | bcrypt |
-| Security | Helmet, CORS, express-rate-limit |
-| Frontend | HTML, CSS, Vanilla JS |
-
----
-
-## ✅ Features (Implemented)
-
-- **User registration & login** with hashed passwords and JWT-based sessions
-- **Role-based access control** — `user`, `company`, and `admin` roles, enforced server-side (role can't be self-escalated at signup)
-- **Admin user management** — full CRUD on users, restricted to admin accounts
-- **Contact form** — public submission endpoint + admin-only inbox view
-- **Security middleware** — Helmet for HTTP headers, CORS, and rate limiting (10 requests / 15 min) on all `/api/auth` routes
-- **Marketing site** — Home, About, Features, How It Works, Contact, Login, Register pages
-
-## 🚧 Roadmap (Planned, Not Yet Built)
-
-The navigation currently links to a few pages that are still in progress:
-
-- [ ] `Internship` model + listings — post, browse, and filter internships
-- [ ] `Application` model — students apply, companies review, status tracking (pending/accepted/rejected)
-- [ ] Student/company **dashboard**
-- [ ] **Certificates** for completed internships
-- [ ] **Reports/analytics** for admins and companies
-- [x] Privacy Policy & Terms pages
-
-If you're picking this project back up, this list is the priority order — the auth/security foundation is solid, so the fastest path to a working demo is the `Internship` + `Application` models next.
-
----
-
-## 📁 Project Structure
-
-```
-INTERSHIP-MANAGEMENT-PROJECT/
-│
-├── server.js               # App entry point — middleware, routing, DB connect, seed
-├── package.json
-├── .env                     # Not committed — see Environment Variables below
-│
-├── config/
-│   └── db.js                # MongoDB connection
-│
-├── routes/
-│   ├── authRoute.js          # /api/auth/register, /api/auth/login
-│   ├── userRoute.js          # /api/users (admin only)
-│   └── contactRoute.js       # /api/contact
-│
-├── controllers/
-│   ├── authController.js
-│   ├── userController.js
-│   └── contactController.js
-│
-├── models/
-│   ├── User.js                # bcrypt hashing, JWT generation, role enum
-│   ├── Contact.js
-│   ├── Post.js                 # scaffolded, not yet wired to a route
-│   └── Comment.js              # scaffolded, not yet wired to a route
-│
-├── middleware/
-│   └── auth.js                # protect (JWT check) + authorize (role check)
-│
-├── public/                    # Static frontend (HTML/CSS/JS)
-│   ├── index.html, about.html, features.html, how-it-works.html,
-│   │   contact.html, login.html, register.html
-│   ├── css/style.css
-│   └── js/app.js
-│
-└── testModels.js              # Manual script to sanity-check models (run with `node testModels.js`)
-```
-
-> **Note:** There's a legacy `FRONTED/` folder from early prototyping (an outdated `User` model and a scratch file) that isn't used anywhere in the app. Safe to delete before sharing or grading this repo.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- A MongoDB connection string (local or [MongoDB Atlas](https://www.mongodb.com/atlas))
-
-### Installation
+Install Node.js 22 or newer and start a MongoDB server. You can also use a MongoDB Atlas database.
 
 ```bash
-git clone https://github.com/NIRAMAY7725/INTERSHIP-MANAGEMENT-PROJECT.git
+git clone --branch develop/internmanage-panels https://github.com/NIRAMAY7725/INTERSHIP-MANAGEMENT-PROJECT.git
 cd INTERSHIP-MANAGEMENT-PROJECT
-npm install
+npm ci
+cp .env.example .env
+node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))"
 ```
 
-### Environment Variables
+Put the generated value in `JWT_SECRET`, set the database name and connection string in `MONGO_URI`, then run `npm start`. Open <http://127.0.0.1:5000>. For development, `npm run dev` restarts the server on code changes.
 
-Create a `.env` file in the project root:
+| Variable | Purpose |
+| --- | --- |
+| `MONGO_URI` | MongoDB connection URI, including the database name. The example connects to a local database. |
+| `JWT_SECRET` | Private signing secret of at least 32 bytes. Changing it invalidates existing JWTs. |
+| `HOST` | Binding address. The example binds to loopback. |
+| `PORT` | HTTP port, default 5000. |
+| `NODE_ENV` | Use `production` behind HTTPS. |
+| `CORS_ORIGIN` | Optional single trusted browser origin for a separately hosted frontend. Leave empty for the bundled frontend. |
 
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_random_secret_at_least_32_characters
-```
+For Atlas, use a database user with access limited to the project database and allow the server's network in Atlas. Escape special characters in URI credentials. Keep `.env` out of source control.
 
-### Run the server
+## Provision an administrator
+
+Register a dedicated student account through the normal form. A trusted operator with database access can activate it as an administrator:
 
 ```bash
-node server.js
+npm run admin -- admin@example.test
 ```
 
-Run `npm start` or `npm run dev` for watch mode.
+Sign in again after provisioning. Public registration offers Student and Company accounts. The admin UI deactivates student and company accounts without deleting records.
 
-The app will be available at `http://localhost:5000`.
+## Repository layout
 
-### First-run setup
+| Directory | Contents |
+| --- | --- |
+| `public/` | Existing public pages, shared dashboard, JavaScript, styles and media |
+| `routes/`, `controllers/` | REST routes and workflow handlers |
+| `middleware/`, `lib/` | Authentication, response handling, request validation and pagination |
+| `models/`, `config/` | Mongoose schemas, indexes and database startup |
+| `scripts/` | Trusted account provisioning and password reset |
+| `tests/` | API integration and browser workflows using an isolated MongoDB process |
+| `screenshots/` | Chromium captures with fictional accounts and data |
 
-No default account is created. Register a student or company through the UI. Provision administrators separately using a trusted database administration process.
+The root `server.js` is the application entry point. `FRONTED/` contains historical prototype files.
 
----
+## Demo workflow
 
-## 📡 API Reference
+1. Register a student and company. Set up both profiles.
+2. Sign in as admin, open **Manage companies**, and approve the company.
+3. Sign in as the company and publish a listing with a future deadline.
+4. Sign in as the student, upload a PDF resume, browse the listing and apply.
+5. Sign in as the company, open **Manage applicants**, and schedule an interview, accept the application and mark it complete.
+6. View the completion as the student and download the applications CSV as the admin.
 
-### Auth — `/api/auth`
-
-| Method | Endpoint | Access | Body |
-|---|---|---|---|
-| POST | `/register` | Public | `{ name, email, password, role? }` |
-| POST | `/login` | Public | `{ email, password }` |
-
-Both return `{ _id, name, email, role, token }` on success. `role` on registration is restricted server-side to `user` or `company` — admin accounts can't be self-registered.
-
-### Users — `/api/users` (admin only, requires `Authorization: Bearer <token>`)
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | List all users |
-| GET | `/:id` | Get one user |
-| POST | `/` | Create a user |
-| PUT | `/:id` | Update a user (password/role/email locked from this endpoint) |
-| DELETE | `/:id` | Delete a user |
-
-### Contact — `/api/contact`
-
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/` | Public | Submit a contact message |
-| GET | `/` | Admin only | View all submitted messages |
-
----
-
-## 🔒 Security Notes
-
-- Passwords are hashed with bcrypt before saving (`User.pre("save")` hook) and never returned by default (`select: false`)
-- JWTs carry `id` and `role`, expire after 7 days
-- Auth endpoints are rate-limited to reduce brute-force risk
-- User updates strip `password`, `role`, `email`, and `_id` server-side to prevent privilege escalation via the update endpoint
-- Before production: set `CORS_ORIGIN` only if a separate frontend origin is required and confirm `JWT_SECRET` is a long, random value stored only in `.env`
-
----
-
-## 🧪 Testing Models
-
-`testModels.js` is a manual script (not an automated test suite) that creates and cleans up a User → Post → Comment chain to confirm the models and their relationships work:
+## Testing
 
 ```bash
-node testModels.js
+npm test
+npx playwright install chromium
+npm run test:browser
 ```
 
----
+For Linux hosts that lack browser libraries, install the Playwright system dependencies using `npx playwright install-deps chromium`. The tests start their own MongoDB and HTTP processes. The first run may require access to download the MongoDB binary. The browser test refreshes the fictional screenshot set.
 
-## 🤝 Contributing
+## Existing databases
 
-This is currently a solo/academic project. If you'd like to contribute, open an issue describing the change before submitting a PR.
+The `users` collection and existing role names are preserved. New profiles are optional and created when users edit them or an administrator verifies a company. Session versions default to zero for older accounts. Existing users sign in again to receive the new token format. Existing companies start as pending if they have no verification record. The app creates indexes on startup. If MongoDB reports a duplicate while building a unique index, back up the database and reconcile the conflicting records before restarting.
 
-## 📄 License
+## Troubleshooting
 
-ISC
+| Symptom | Check |
+| --- | --- |
+| Startup fails | Check the MongoDB URI, firewall, database user permissions and signing secret. |
+| Company cannot publish | Check that the account is active and the company verification is approved. |
+| Listing is absent from student search | Check its deadline, status, company verification and filters. |
+| Resume upload fails | Choose a PDF of 2 MiB or less. |
+| Previously valid JWT is rejected | Sign in again after logout, password change, deactivation or secret rotation. |
+| Browser test fails to launch | Install Chromium and its host libraries. |
 
-## 👤 Author
-
-**Niramay** — [@NIRAMAY7725](https://github.com/NIRAMAY7725)
-
-
-<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_28 PM" src="https://github.com/user-attachments/assets/bc92b44f-7b5e-4d32-8091-4b991382df92" />
-<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_35 PM" src="https://github.com/user-attachments/assets/069b78a1-aac3-4efc-b376-6df0ba997157" />
-<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_06_47 PM" src="https://github.com/user-attachments/assets/cecb577b-a43b-4af5-878d-92ed5b64318b" />
-<img width="1536" height="1024" alt="ChatGPT Image Aug 6, 2026, 09_09_09 PM" src="https://github.com/user-attachments/assets/f8d05017-dcbe-49cf-b1f1-7733497622ca" />
-<img width="1402" height="1122" alt="ChatGPT Image Aug 6, 2026, 09_14_09 PM" src="https://github.com/user-attachments/assets/58e7a2b0-87bb-475b-8bf3-e4ab3b31904a" />
-<img width="1536" height="1024" alt="ChatGPT Image Aug 9, 2026, 08_57_21 PM" src="https://github.com/user-attachments/assets/370049df-bd6d-415b-bf0a-a9839ea847d9" />
-
+[REST API](API_DOCUMENTATION.md) · [MongoDB commands](MONGODB_COMMANDS.md) · [Feature guide](FEATURE_WORKING.md) · [Test report](TEST_REPORT.md) · [Changelog](CHANGELOG.md)
