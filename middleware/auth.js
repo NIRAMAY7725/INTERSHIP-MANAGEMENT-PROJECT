@@ -2,45 +2,28 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const protect = async (req, res, next) => {
-    let token;
-
-    // Check for Bearer token in Authorization header
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith("Bearer")
-    ) {
-        try {
-            token = req.headers.authorization.split(" ")[1];
-
-            const decoded = jwt.verify(
-                token,
-                process.env.JWT_SECRET
-            );
-
-            // Attach user to request (exclude password)
-            req.user = await User.findById(decoded.id);
-
-            next();
-        } catch (error) {
-            res.status(401).json({ error: "Not authorized, token failed" });
-        }
+    const match = /^Bearer ([^\s]+)$/i.exec(req.headers.authorization || "");
+    if (!match) return res.status(401).json({ error: "Authentication required" });
+    let decoded;
+    try {
+        decoded = jwt.verify(match[1], process.env.JWT_SECRET, { algorithms: ["HS256"] });
+    } catch {
+        return res.status(401).json({ error: "Invalid or expired token" });
     }
-
-    if (!token) {
-        res.status(401).json({ error: "Not authorized, no token" });
+    try {
+        const user = await User.findById(decoded.id);
+        if (!user || !user.isActive) return res.status(401).json({ error: "Account unavailable" });
+        req.user = user;
+        return next();
+    } catch (error) {
+        return next(error);
     }
 };
 
-// Role-based access control
-const authorize = (...roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
-            return res
-                .status(403)
-                .json({ error: "Not authorized for this action" });
-        }
-        next();
-    };
+const authorize = (...roles) => (req, res, next) => {
+    if (!req.user) return res.status(401).json({ error: "Authentication required" });
+    if (!roles.includes(req.user.role)) return res.status(403).json({ error: "Not authorized for this action" });
+    return next();
 };
 
 module.exports = { protect, authorize };
