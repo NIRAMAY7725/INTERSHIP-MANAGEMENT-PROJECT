@@ -1,14 +1,17 @@
 {
-  "name": "backend",
+  "name": "internmanage",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
     "stop": "npx kill-port 5000",
     "tunnel": "npx localtunnel --port 5000",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test tests/integration.test.js",
+    "test:browser": "node tests/browser.js",
+    "admin": "node scripts/account.js admin",
+    "password": "node scripts/account.js password"
   },
   "keywords": [],
   "author": "",
@@ -29,5 +32,8 @@
   "devDependencies": {
     "mongodb-memory-server": "^11.4.0",
     "playwright": "^1.65.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

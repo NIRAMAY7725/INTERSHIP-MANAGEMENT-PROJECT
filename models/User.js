@@ -60,6 +60,8 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.index({ role: 1, isActive: 1 });
+
 // ─── Pre-save hook: hash password before saving ─────────────────────
 userSchema.pre("save", async function () {
   // Only hash the password if it has been modified (or is new)

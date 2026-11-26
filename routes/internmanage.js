@@ -20,10 +20,10 @@ router.use(protect);
 
 async function updateProfile(model, user, values) {
     try {
-        return await model.findOneAndUpdate({ user }, { $set: values }, { upsert: true, new: true, runValidators: true });
+        return await model.findOneAndUpdate({ user }, { $set: values }, { upsert: true, returnDocument: "after", runValidators: true });
     } catch (error) {
         if (error.code !== 11000) throw error;
-        return model.findOneAndUpdate({ user }, { $set: values }, { new: true, runValidators: true });
+        return model.findOneAndUpdate({ user }, { $set: values }, { returnDocument: "after", runValidators: true });
     }
 }
 
@@ -117,7 +117,7 @@ router.patch("/internships/:id", company, async (req, res) => {
     if (status !== undefined && status !== "closed") fail(400, "Use closed to close a listing");
     if (status) values.status = status;
     res.json(found(await Internship.findOneAndUpdate(
-        { _id: id(req.params.id), company: req.user.id, status: "open" }, values, { new: true, runValidators: true }
+        { _id: id(req.params.id), company: req.user.id, status: "open" }, values, { returnDocument: "after", runValidators: true }
     )));
 });
 router.delete("/internships/:id", authorize("company", "admin"), async (req, res) => {
@@ -200,7 +200,7 @@ router.patch("/applications/:id", authorize("user", "company"), async (req, res)
     }
     if (status === "completed") values.completedAt = new Date();
     const updated = await Application.findOneAndUpdate({ ...scope, status: item.status, updatedAt: item.updatedAt },
-        { $set: values, $unset: { statusReadAt: 1 } }, { new: true, runValidators: true });
+        { $set: values, $unset: { statusReadAt: 1, ...(req.user.role === "user" ? { companyReadAt: 1 } : {}) } }, { returnDocument: "after", runValidators: true });
     if (!updated) fail(409, "The application changed. Refresh and try again.");
     res.json(updated);
 });
@@ -212,16 +212,19 @@ router.get("/notifications", authorize("user", "company"), async (req, res) => {
         list(Application, { ...applicationScope(req.user), ...applicationFilter }, req,
             query => query.sort({ updatedAt: -1, _id: -1 }).populate("internship", "title")),
     ]);
+    if (req.user.role === "company") {
+        for (const item of updates.items) item.statusReadAt = item.companyReadAt;
+    }
     res.json({ notifications, updates });
 });
 router.patch("/notifications/:id", async (req, res) => {
-    res.json(found(await Notification.findOneAndUpdate({ user: req.user.id, _id: id(req.params.id) }, { readAt: new Date() }, { new: true })));
+    res.json(found(await Notification.findOneAndUpdate({ user: req.user.id, _id: id(req.params.id) }, { readAt: new Date() }, { returnDocument: "after" })));
 });
 router.patch("/notifications/application/:id", authorize("user", "company"), async (req, res) => {
     const { updatedAt } = fields(req.body, { updatedAt: "string" });
     if (!Number.isFinite(Date.parse(updatedAt))) fail(400, "Invalid notification timestamp");
     found(await Application.findOneAndUpdate({ ...applicationScope(req.user), _id: id(req.params.id), updatedAt },
-        { statusReadAt: new Date() }, { timestamps: false }));
+        { [req.user.role === "company" ? "companyReadAt" : "statusReadAt"]: new Date() }, { timestamps: false }));
     res.json({ message: "Marked as read" });
 });
 

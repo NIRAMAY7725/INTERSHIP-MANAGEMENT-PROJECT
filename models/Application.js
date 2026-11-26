@@ -9,6 +9,7 @@ const schema = new Schema({
     interviewDetails: { type: String, maxlength: 2000 },
     completedAt: Date,
     statusReadAt: Date,
+    companyReadAt: Date,
 }, { timestamps: true });
 schema.index({ internship: 1, student: 1 }, { unique: true });
 schema.index({ student: 1, status: 1, createdAt: -1 });

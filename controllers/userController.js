@@ -44,7 +44,7 @@ async function update(req, res, values) {
     if (values.isActive === false) filter.role = { $ne: "admin" };
     const changes = { $set: values };
     if (values.isActive === false) changes.$inc = { sessionVersion: 1 };
-    const user = await User.findOneAndUpdate(filter, changes, { new: true, runValidators: true });
+    const user = await User.findOneAndUpdate(filter, changes, { returnDocument: "after", runValidators: true });
     if (!user && await User.exists({ _id: key, role: "admin" })) fail(409, "Administrator deactivation is an operator task");
     found(user);
     await Audit.create({ actor: req.user.id, action: values.isActive === false ? "Deactivated account" : "Updated account", target: key });
